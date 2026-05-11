@@ -72,3 +72,27 @@ Test results:
 - Single-open accordion with smooth grid-rows transition
 - Each division uses a unique lucide icon (HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt)
 - iteration_3.json — 100% PASS, no regressions
+
+## Iteration 5 (2025-12) — CMS + Production assets
+**Production division enhancements:**
+- ✅ 2 showreel videos compressed (417MB→17MB, 347MB→16MB) and embedded inline (PRODUCTION SHOWREEL · VOL 1/2)
+- ✅ 3 PDF catalogs (Audio/Lens/Camera) compressed (~170MB → ~1.5MB) with elegant download buttons
+
+**Full CMS Implementation:**
+- ✅ JWT-based auth (24h tokens, bcrypt password hashing, single admin seeded from env)
+- ✅ Backend: FastAPI endpoints — auth, news CRUD, projects CRUD (11 seeded), services-overrides upsert, file uploads
+- ✅ Admin UI at /admin: News manager (CRUD + image upload), Projects manager (CRUD + gallery), Services editor (per-division override with reset)
+- ✅ Home: News section between Portfolio & Industries (only shows when published items exist)
+- ✅ Portfolio, ProjectDetail now fetch from /api/projects
+- ✅ Services accordion merges DB overrides on-the-fly
+- ✅ WhatsApp FAB hidden on /admin routes
+
+**Architecture:**
+- Bearer token auth (localStorage) — CORS allow_origin_regex=".*"
+- File uploads → /app/backend/uploads served via StaticFiles at /api/uploads
+- Mongo collections: users, news, projects, services_overrides (all with unique indexes)
+
+**Credentials (test_credentials.md):** admin@armeenhw.com / nYVD628EDNIF8B
+
+**Test results:**
+- iteration_4.json — Backend 20/20 PASS, Frontend 100% critical flows PASS, zero console errors
