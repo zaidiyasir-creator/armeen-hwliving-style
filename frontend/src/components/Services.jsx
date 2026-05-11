@@ -1,13 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
-import { HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt, Plus, Minus, Clapperboard } from "lucide-react";
+import { api } from "../api";
+import { HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt, Plus, Minus, Clapperboard, Download, Play } from "lucide-react";
 
 const iconMap = { HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt };
 
 const Services = () => {
     const { t, lang } = useLang();
-    const [open, setOpen] = useState(0); // first division expanded by default
+    const [open, setOpen] = useState(0);
+    const [overrides, setOverrides] = useState({});
+
+    useEffect(() => {
+        let mounted = true;
+        api.get("/services-overrides")
+            .then(({ data }) => {
+                if (!mounted) return;
+                const map = {};
+                data.forEach((o) => { map[o.key] = o; });
+                setOverrides(map);
+            })
+            .catch(() => {});
+        return () => { mounted = false; };
+    }, []);
+
+    const divisions = content.services.divisions.map((d) => {
+        const ov = overrides[d.key];
+        if (!ov) return d;
+        return {
+            ...d,
+            title: ov.title || d.title,
+            summary: ov.summary || d.summary,
+            bullets: ov.bullets || d.bullets,
+        };
+    });
 
     return (
         <section id="services" className="relative py-28 md:py-40 bg-[#0a0a0a] border-y border-[#1a1a1a]" data-testid="services-section">
@@ -29,7 +55,7 @@ const Services = () => {
 
                 {/* Divisions accordion */}
                 <div className="mt-16 border-t border-[#1a1a1a]" data-testid="services-divisions">
-                    {content.services.divisions.map((d, i) => {
+                    {divisions.map((d, i) => {
                         const Icon = iconMap[d.icon] || HardHat;
                         const isOpen = open === i;
                         return (
@@ -95,6 +121,65 @@ const Services = () => {
                                                                     ? "Production showreel by our in-house cinematographer to be added shortly."
                                                                     : "Showreel produksi oleh sinematografer dalaman kami akan ditambah tidak lama lagi."}
                                                             </p>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Production showreel videos */}
+                                                {d.videos && (
+                                                    <div className="mt-10" data-testid={`division-${d.key}-videos`}>
+                                                        <p className="eyebrow mb-5 flex items-center gap-2">
+                                                            <Clapperboard className="w-3.5 h-3.5" />
+                                                            {lang === "en" ? "Production Showreel" : "Showreel Produksi"}
+                                                        </p>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                                            {d.videos.map((v, vi) => (
+                                                                <div key={vi} className="group relative aspect-video bg-[#080808] border border-[#1a1a1a] overflow-hidden" data-testid={`division-${d.key}-video-${vi}`}>
+                                                                    <video
+                                                                        src={v.src}
+                                                                        poster={v.poster}
+                                                                        controls
+                                                                        preload="metadata"
+                                                                        className="w-full h-full object-cover"
+                                                                    >
+                                                                        Your browser does not support the video tag.
+                                                                    </video>
+                                                                    <div className="absolute top-4 left-4 bg-[#050505]/80 backdrop-blur-sm border border-[#E9B949]/30 px-3 py-1.5 pointer-events-none">
+                                                                        <span className="text-[9px] uppercase tracking-[0.32em] text-[#E9B949]">{t(v.label)}</span>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Equipment catalogs download */}
+                                                {d.catalogs && (
+                                                    <div className="mt-10" data-testid={`division-${d.key}-catalogs`}>
+                                                        <p className="eyebrow mb-5 flex items-center gap-2">
+                                                            <Download className="w-3.5 h-3.5" />
+                                                            {lang === "en" ? "Equipment Catalogs" : "Katalog Peralatan"}
+                                                        </p>
+                                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#1a1a1a]">
+                                                            {d.catalogs.map((c, ci) => (
+                                                                <a
+                                                                    key={ci}
+                                                                    href={c.src}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    download
+                                                                    className="bg-[#080808] hover:bg-[#0f0f0f] p-6 flex items-center justify-between group transition-colors"
+                                                                    data-testid={`division-${d.key}-catalog-${ci}`}
+                                                                >
+                                                                    <div>
+                                                                        <p className="font-serif text-lg text-white group-hover:text-[#E9B949] transition-colors">{t(c.label)}</p>
+                                                                        <p className="mt-1 text-[10px] uppercase tracking-[0.28em] text-gray-500">PDF · {lang === "en" ? "Download" : "Muat Turun"}</p>
+                                                                    </div>
+                                                                    <div className="w-10 h-10 border border-[#27272A] group-hover:border-[#E9B949] group-hover:bg-[#E9B949] group-hover:text-[#050505] text-gray-500 flex items-center justify-center transition-all duration-500">
+                                                                        <Download size={14} />
+                                                                    </div>
+                                                                </a>
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 )}

@@ -1,7 +1,7 @@
-import React from "react";
-import { Link, useParams, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useLang } from "../components/LanguageContext";
-import { findProject, projects } from "../data/projects";
+import { api, resolveAsset } from "../api";
 import { ArrowLeft, MapPin, Calendar, Briefcase, Wrench } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -10,10 +10,33 @@ import { useReveal } from "../hooks/useReveal";
 const ProjectDetail = () => {
     const { slug } = useParams();
     const { t, lang } = useLang();
+    const navigate = useNavigate();
     useReveal();
-    const project = findProject(slug);
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    if (!project) return <Navigate to="/" replace />;
+    useEffect(() => {
+        api.get("/projects")
+            .then(({ data }) => setProjects(data))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) {
+        return (
+            <>
+                <Header />
+                <div className="min-h-screen flex items-center justify-center bg-[#050505]">
+                    <p className="eyebrow">Loading…</p>
+                </div>
+            </>
+        );
+    }
+
+    const project = projects.find((p) => p.slug === slug);
+    if (!project) {
+        navigate("/", { replace: true });
+        return null;
+    }
 
     const idx = projects.findIndex((p) => p.slug === slug);
     const next = projects[(idx + 1) % projects.length];
@@ -23,13 +46,10 @@ const ProjectDetail = () => {
         <>
             <Header />
             <main className="bg-[#050505]" data-testid="project-detail">
-                {/* Cinematic hero */}
                 <section className="relative h-[78vh] min-h-[620px] flex items-end overflow-hidden">
-                    <img
-                        src={project.cover}
-                        alt={t(project.title)}
-                        className="absolute inset-0 w-full h-full object-cover opacity-70"
-                    />
+                    {project.cover && (
+                        <img src={resolveAsset(project.cover)} alt={t(project.title)} className="absolute inset-0 w-full h-full object-cover opacity-70" />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/30 to-[#050505]"></div>
                     <div className="absolute inset-0 grain"></div>
 
@@ -45,7 +65,6 @@ const ProjectDetail = () => {
                     </div>
                 </section>
 
-                {/* Meta strip */}
                 <section className="border-y border-[#1a1a1a]">
                     <div className="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-px bg-[#1a1a1a]">
                         {[
@@ -57,66 +76,58 @@ const ProjectDetail = () => {
                             <div key={i} className="bg-[#050505] p-6 md:p-8" data-testid={`project-meta-${i}`}>
                                 <m.icon className="w-4 h-4 text-[#E9B949]" />
                                 <p className="eyebrow mt-4">{t(m.label)}</p>
-                                <p className="mt-3 font-serif text-base md:text-lg text-white leading-snug">{m.value}</p>
+                                <p className="mt-3 font-serif text-base md:text-lg text-white leading-snug">{m.value || "—"}</p>
                             </div>
                         ))}
                     </div>
                 </section>
 
-                {/* Summary + highlights */}
                 <section className="py-24 md:py-32">
                     <div className="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
                         <div className="lg:col-span-7 reveal">
                             <p className="eyebrow mb-6">{lang === "en" ? "Project Brief" : "Ringkasan Projek"}</p>
                             <p className="font-serif text-2xl md:text-3xl text-white leading-relaxed font-light">{t(project.summary)}</p>
                         </div>
-                        <div className="lg:col-span-5 reveal">
-                            <p className="eyebrow mb-6">{lang === "en" ? "Highlights" : "Sorotan"}</p>
-                            <ul className="divide-y divide-[#27272A]">
-                                {project.highlights.map((h, i) => (
-                                    <li key={i} className="py-5 flex items-baseline gap-5" data-testid={`highlight-${i}`}>
-                                        <span className="font-serif text-[#E9B949] text-sm tracking-widest">{String(i + 1).padStart(2, "0")}</span>
-                                        <span className="text-gray-300 font-light leading-relaxed">{t(h)}</span>
-                                    </li>
+                        {project.highlights && project.highlights.length > 0 && (
+                            <div className="lg:col-span-5 reveal">
+                                <p className="eyebrow mb-6">{lang === "en" ? "Highlights" : "Sorotan"}</p>
+                                <ul className="divide-y divide-[#27272A]">
+                                    {project.highlights.map((h, i) => (
+                                        <li key={i} className="py-5 flex items-baseline gap-5">
+                                            <span className="font-serif text-[#E9B949] text-sm tracking-widest">{String(i + 1).padStart(2, "0")}</span>
+                                            <span className="text-gray-300 font-light leading-relaxed">{t(h)}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </section>
+
+                {project.gallery && project.gallery.length > 0 && (
+                    <section className="py-16 md:py-24 bg-[#080808] border-y border-[#1a1a1a]" data-testid="project-gallery">
+                        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+                            <p className="eyebrow mb-8">{lang === "en" ? "Gallery" : "Galeri"}</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                {project.gallery.map((src, i) => (
+                                    <div key={i} className={`relative overflow-hidden group ${i === 0 ? "md:col-span-2 aspect-[21/9]" : "aspect-[4/3]"}`}>
+                                        <img src={resolveAsset(src)} alt="" loading="lazy" className="hover-img absolute inset-0 w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity duration-700" />
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                )}
 
-                {/* Gallery */}
-                <section className="py-16 md:py-24 bg-[#080808] border-y border-[#1a1a1a]" data-testid="project-gallery">
-                    <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-                        <p className="eyebrow mb-8">{lang === "en" ? "Gallery" : "Galeri"}</p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                            {project.gallery.map((src, i) => (
-                                <div key={i} className={`relative overflow-hidden group ${i === 0 ? "md:col-span-2 aspect-[21/9]" : "aspect-[4/3]"}`}>
-                                    <img
-                                        src={src}
-                                        alt=""
-                                        className="hover-img absolute inset-0 w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity duration-700"
-                                        loading="lazy"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* Prev / Next */}
                 <section className="py-24">
                     <div className="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12">
                         <Link to={`/projects/${prev.slug}`} className="group" data-testid="prev-project">
                             <p className="eyebrow mb-4">{lang === "en" ? "Previous Project" : "Projek Sebelumnya"}</p>
-                            <p className="font-serif text-2xl md:text-3xl text-gray-300 group-hover:text-[#E9B949] transition-colors leading-tight">
-                                ← {t(prev.title)}
-                            </p>
+                            <p className="font-serif text-2xl md:text-3xl text-gray-300 group-hover:text-[#E9B949] transition-colors leading-tight">← {t(prev.title)}</p>
                         </Link>
                         <Link to={`/projects/${next.slug}`} className="group md:text-right" data-testid="next-project">
                             <p className="eyebrow mb-4">{lang === "en" ? "Next Project" : "Projek Seterusnya"}</p>
-                            <p className="font-serif text-2xl md:text-3xl text-gray-300 group-hover:text-[#E9B949] transition-colors leading-tight">
-                                {t(next.title)} →
-                            </p>
+                            <p className="font-serif text-2xl md:text-3xl text-gray-300 group-hover:text-[#E9B949] transition-colors leading-tight">{t(next.title)} →</p>
                         </Link>
                     </div>
                 </section>

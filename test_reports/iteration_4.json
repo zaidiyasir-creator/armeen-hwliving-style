@@ -1,0 +1,44 @@
+{
+  "summary": "Iteration 5 CMS full-stack verified. Backend: 20/20 pytest tests passed (auth login/me/unauthorized, news full CRUD, projects list/get/seed=11, services-overrides upsert/get/delete, file upload+serve, all 3 PDF catalogs and 2 showreel mp4s return 200). Frontend: admin login, dashboard with 3 tabs (News/Projects/Services), 7 service-tab division testids present, 11 project-rows including rumah-gadang-chalet-jempol, news creation via UI works (row appears in news-list), news-section + news-grid + news-modal visible on home, WhatsApp FAB correctly hidden on /admin, logout redirects to /admin/login, protected /admin redirects unauthenticated users, project detail page loads bilingual data from /api/projects, Production division accordion exposes division-production-video-0/-1 and division-production-catalog-0/-1/-2 with correct /armeen/catalogs/{camera,lens,audio}-catalog.pdf hrefs. No console errors on any page.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_cms_backend.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Minor / testability) BiInput component (used in NewsManager + ServicesManager + ProjectsManager) renders bilingual EN/BM input pairs but does not propagate per-field data-testid attributes. Reference request expected testids like news-title-en/bm, service-summary-en, etc. Recommend adding optional testIdPrefix prop to BiInput so each input gets `${testIdPrefix}-en` / `${testIdPrefix}-bm` for robust UI automation. Functionally everything works; this is purely test ergonomics.",
+    "(Optional) Add `data-testid` on Save changes / Reset to default buttons inside ServicesManager (currently only matchable by text) and on news editor Save (already has news-save) — same pattern across managers for consistency."
+  ],
+  "critical_code_review_comments": [
+    "server.py CORS uses allow_origin_regex='.*' WITH allow_credentials=True — this works only because frontend axios is set to withCredentials=false (Bearer-token flow). Acceptable for current setup; just be aware browser will reject any future credentialed call.",
+    "server.py is ~630 lines (DEFAULT_PROJECTS seed dominates). Acceptable, but if it grows further consider moving seed data to a separate JSON or seeds module.",
+    "MongoDB _id is properly excluded in all find queries (good).",
+    "Async/await correctly applied throughout backend.",
+    "JWT secret, admin credentials read from env (no hardcoded values).",
+    "Auth dependency get_current_user supports both cookie and Bearer (matches frontend strategy).",
+    "Seed admin updates password if the env password changed — good for environment rotations.",
+    "Upload endpoint validates extension whitelist and uses uuid filenames — good.",
+    "No rate-limiting / brute-force lockout on /api/auth/login — playbook mentions 5-fail lockout; not implemented. Not blocking but worth noting."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_cms_backend.py (new file)"
+  ],
+  "success_rate": {
+    "backend": "100% (20/20)",
+    "frontend": "100% of critical flows (every required assertion verified either by UI or by the corresponding backend integration)"
+  },
+  "test_credentials": "admin@armeenhw.com / nYVD628EDNIF8B (from /app/memory/test_credentials.md, login verified)",
+  "seed_data_creation": "Test news items created during UI runs were cleaned up at the end (news collection left empty). No projects or service-overrides were left behind.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Pytest suite at /app/backend/tests/test_cms_backend.py covers full CMS API surface and asset HEAD checks; rerun with: pytest /app/backend/tests/test_cms_backend.py -v. UI testids of note: data-testid on login-email/password/submit, admin-dashboard, tab-news/projects/services, news-new/save, news-list, news-row-<id>, news-edit-<id>, news-delete-<id>, news-editor, project-row-<slug>, project-editor, service-tab-<key> (7 keys: construction, electrical-mechanical, it, production, corporate-gift, ev-charger, laundry), services-editor, news-section, news-grid, news-card-<id>, news-modal, division-production-video-0/1, division-production-catalog-0/1/2, logout-button. Note: bilingual BiInput sub-inputs do NOT have testids — match them via placeholder text like 'Title (EN)' / 'Short summary (EN)' / 'Full body (BM)'.",
+  "rca of the issue": "No issues detected — all features in the review request are implemented and working end-to-end."
+}
