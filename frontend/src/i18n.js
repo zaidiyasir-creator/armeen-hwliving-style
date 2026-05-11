@@ -49,85 +49,120 @@ export const content = {
         ],
     },
     services: {
-        eyebrow: { en: "Two Disciplines, One Standard", bm: "Dua Disiplin, Satu Piawai" },
+        eyebrow: { en: "Seven Disciplines, One Standard", bm: "Tujuh Disiplin, Satu Piawai" },
         title: { en: "Services", bm: "Perkhidmatan" },
         sub: {
-            en: "We operate two integrated practices under a single covenant of quality — construction & civil engineering, and enterprise IT infrastructure.",
-            bm: "Kami mengendalikan dua praktik bersepadu di bawah satu komitmen kualiti — pembinaan & kejuruteraan awam, dan infrastruktur IT enterprise.",
+            en: "An integrated practice operating across seven specialist divisions — from heavy civil construction to electric mobility — under one covenant of quality and accountability.",
+            bm: "Sebuah praktik bersepadu yang beroperasi merentas tujuh bahagian khusus — daripada pembinaan awam berat hingga mobiliti elektrik — di bawah satu komitmen kualiti dan tanggungjawab.",
         },
-        construction: {
-            heading: { en: "Construction & Civil Engineering", bm: "Pembinaan & Kejuruteraan Awam" },
-            items: [
-                {
-                    title: { en: "Preliminary & Site Clearing", bm: "Pembersihan & Penyediaan Tapak" },
-                    desc: {
-                        en: "Site clearing and grading, temporary security fencing, access road construction and early drainage systems.",
-                        bm: "Pembersihan dan meratakan tapak, kerja pagar keselamatan sementara, penyediaan jalan masuk dan sistem saliran awal.",
-                    },
+        divisions: [
+            {
+                key: "construction",
+                icon: "HardHat",
+                title: { en: "Construction & Interior Design", bm: "Pembinaan & Reka Bentuk Dalaman" },
+                summary: {
+                    en: "Full-spectrum civil, structural, MEP and architectural finishing — paired with bespoke interior design from concept through handover.",
+                    bm: "Penuh-spektrum awam, struktur, MEP dan kemasan senibina — digandingkan dengan reka bentuk dalaman tersuai dari konsep hingga serahan.",
                 },
-                {
-                    title: { en: "Structural & Superstructure Works", bm: "Kerja Struktur & Super-Struktur" },
-                    desc: {
-                        en: "Reinforced concrete works (RC), steel structures, columns, beams, slabs, footings, brickwork, formwork and structural stabilisation.",
-                        bm: "Kerja konkrit tetulang (RC), struktur keluli, kolum, beam, slab, footing, tembok bata, acuan dan penstabilan struktur.",
-                    },
-                },
-                {
-                    title: { en: "Mechanical, Electrical & Plumbing", bm: "Mekanikal, Elektrikal & Paip (MEP)" },
-                    desc: {
-                        en: "Electrical wiring, DB installation, commercial HVAC, plumbing & sanitary, rainwater harvesting and complete fire protection systems.",
-                        bm: "Pendawaian elektrik, pemasangan DB, HVAC komersial, sistem paip & sanitari, rainwater harvesting dan sistem perlindungan kebakaran.",
-                    },
-                },
-                {
-                    title: { en: "Architectural Finishing", bm: "Kemasan Senibina" },
-                    desc: {
-                        en: "Plaster and paintwork, tiling, vinyl & parquet, ceiling and grid systems, timber and aluminium joinery, doors, windows, grilles and railings.",
-                        bm: "Kerja plaster dan cat, jubin, vinyl & parket, siling kapur & grid, kemasan kayu & aluminium, pintu, tingkap, gril dan railing.",
-                    },
-                },
-                {
-                    title: { en: "Civil & Infrastructure Works", bm: "Kerja Awam & Infrastruktur" },
-                    desc: {
-                        en: "Premix roadworks, concrete drains and culverts, underground water mains, septic and utility chambers, manholes and storm drainage.",
-                        bm: "Jalan premix, longkang konkrit, culvert, pemasangan paip air bawah tanah, tapak tangki, septik dan sistem perparitan & manhole.",
-                    },
-                },
-                {
-                    title: { en: "Tender & Project Support", bm: "Sokongan Tender & Projek" },
-                    desc: {
-                        en: "Bill of Quantity preparation, work plans and Gantt charts, technical endorsements, coordination with architects, engineers and consultants.",
-                        bm: "Penyediaan Bill of Quantity (BQ), pelan kerja & carta Gantt, sokongan teknikal, penyelarasan dengan arkitek, jurutera & konsultan.",
-                    },
-                },
-            ],
-        },
-        it: {
-            heading: { en: "IT Solutions & Digital Infrastructure", bm: "Penyelesaian IT & Infrastruktur Digital" },
-            intro: {
-                en: "A comprehensive catalogue of enterprise technology solutions — each engineered to address complex organisational challenges with precision, scalability and long-term value.",
-                bm: "Katalog komprehensif penyelesaian teknologi enterprise — setiap satu dijuruterai untuk menangani cabaran organisasi yang kompleks dengan ketepatan, kebolehskalaan dan nilai jangka panjang.",
+                bullets: [
+                    { en: "Site clearing, RC structures & superstructure", bm: "Pembersihan tapak, struktur RC & super-struktur" },
+                    { en: "Architectural finishing & bespoke joinery", bm: "Kemasan senibina & joinery tersuai" },
+                    { en: "Interior design — concept to fit-out", bm: "Reka bentuk dalaman — konsep hingga fit-out" },
+                    { en: "Civil & infrastructure works", bm: "Kerja awam & infrastruktur" },
+                ],
             },
-            items: [
-                { title: { en: "Smart City Solutions", bm: "Penyelesaian Bandar Pintar" }, desc: { en: "Intelligent urban infrastructure, IoT integration and connected community platforms.", bm: "Infrastruktur bandar pintar, integrasi IoT dan platform komuniti bersambung." } },
-                { title: { en: "ERP & Enterprise Platforms", bm: "ERP & Platform Enterprise" }, desc: { en: "End-to-end enterprise resource planning and business process automation.", bm: "Perancangan sumber enterprise hujung ke hujung dan automasi proses perniagaan." } },
-                { title: { en: "SaaS Development", bm: "Pembangunan SaaS" }, desc: { en: "Custom cloud-native software-as-a-service platforms built for scale.", bm: "Platform SaaS cloud-native tersuai yang dibina untuk skala." } },
-                { title: { en: "Cloud Infrastructure", bm: "Infrastruktur Cloud" }, desc: { en: "Hybrid and multi-cloud architecture, migration and managed cloud services.", bm: "Senibina hibrid & multi-cloud, migrasi dan perkhidmatan cloud terurus." } },
-                { title: { en: "Cybersecurity Solutions", bm: "Penyelesaian Keselamatan Siber" }, desc: { en: "Advanced threat protection, network security and compliance frameworks.", bm: "Perlindungan ancaman lanjutan, keselamatan rangkaian dan rangka kepatuhan." } },
-                { title: { en: "GIS & Geospatial Systems", bm: "Sistem GIS & Geospatial" }, desc: { en: "Spatial data intelligence, mapping platforms and location analytics.", bm: "Risikan data spatial, platform pemetaan dan analitik lokasi." } },
-                { title: { en: "Data Center Solutions", bm: "Penyelesaian Pusat Data" }, desc: { en: "Design, build and managed data centre services with high availability.", bm: "Reka bentuk, bina dan urus pusat data dengan ketersediaan tinggi." } },
-                { title: { en: "System Integration", bm: "Integrasi Sistem" }, desc: { en: "Seamless enterprise system connectivity and middleware architecture.", bm: "Ketersambungan sistem enterprise lancar dan senibina middleware." } },
-                { title: { en: "Network Infrastructure", bm: "Infrastruktur Rangkaian" }, desc: { en: "Enterprise LAN/WAN design, deployment and optimisation.", bm: "Reka bentuk, pelaksanaan dan pengoptimuman LAN/WAN enterprise." } },
-                { title: { en: "Disaster Recovery & BCP", bm: "Pemulihan Bencana & BCP" }, desc: { en: "Resilient DR strategies, failover systems and Business Continuity frameworks.", bm: "Strategi DR yang berdaya tahan, sistem failover dan rangka BCP." } },
-                { title: { en: "AI & Data Analytics", bm: "AI & Analitik Data" }, desc: { en: "Machine learning, predictive analytics and business intelligence platforms.", bm: "Pembelajaran mesin, analitik ramalan dan platform business intelligence." } },
-                { title: { en: "Mobile & Web Applications", bm: "Aplikasi Mudah Alih & Web" }, desc: { en: "Cross-platform enterprise mobile apps and responsive web solutions.", bm: "Aplikasi mudah alih enterprise rentas platform dan web responsif." } },
-                { title: { en: "SD-WAN Services", bm: "Perkhidmatan SD-WAN" }, desc: { en: "Software-defined wide-area network design and managed services.", bm: "Reka bentuk SD-WAN dan perkhidmatan terurus." } },
-                { title: { en: "Active Directory Services", bm: "Perkhidmatan Active Directory" }, desc: { en: "Identity management, access control and directory services.", bm: "Pengurusan identiti, kawalan akses dan perkhidmatan direktori." } },
-                { title: { en: "Managed ICT Services", bm: "Perkhidmatan ICT Terurus" }, desc: { en: "Proactive IT management, monitoring and support services.", bm: "Pengurusan IT proaktif, pemantauan dan sokongan." } },
-                { title: { en: "PABX & Telephony", bm: "PABX & Telefoni" }, desc: { en: "Supply and installation of PABX systems (analog/IP), SIP trunks, IVR, call recording and ring groups.", bm: "Bekalan dan pemasangan sistem PABX (analog/IP), SIP trunk, IVR, rakaman panggilan dan ring group." } },
-                { title: { en: "Project Management & Consultancy", bm: "Pengurusan Projek & Konsultansi" }, desc: { en: "PRINCE2-aligned project governance and strategic ICT consultancy.", bm: "Tadbir urus projek selaras PRINCE2 dan konsultansi ICT strategik." } },
-            ],
-        },
+            {
+                key: "electrical-mechanical",
+                icon: "Zap",
+                title: { en: "Electrical & Mechanical Engineering", bm: "Kejuruteraan Elektrikal & Mekanikal" },
+                summary: {
+                    en: "Specialised E&M engineering — distribution boards, HVAC, lighting design, mechanical fit-outs and energy-efficient retrofits engineered to international code.",
+                    bm: "Kejuruteraan E&M khusus — papan agihan, HVAC, reka bentuk pencahayaan, fit-out mekanikal dan retrofit cekap tenaga dijuruterai mengikut kod antarabangsa.",
+                },
+                bullets: [
+                    { en: "DB systems, sub-mains & electrical wiring", bm: "Sistem DB, sub-utama & pendawaian elektrik" },
+                    { en: "Commercial HVAC & air conditioning", bm: "HVAC komersial & penyaman udara" },
+                    { en: "Fire protection & life-safety systems", bm: "Perlindungan kebakaran & sistem keselamatan nyawa" },
+                    { en: "Energy audits & efficiency retrofits", bm: "Audit tenaga & retrofit kecekapan" },
+                ],
+            },
+            {
+                key: "it",
+                icon: "ServerCog",
+                title: { en: "IT Solutions & Digital Infrastructure", bm: "Penyelesaian IT & Infrastruktur Digital" },
+                summary: {
+                    en: "Enterprise-grade infrastructure, cloud, cybersecurity, networking, PABX telephony and AI-driven analytics — built for scale and resilience.",
+                    bm: "Infrastruktur gred enterprise, cloud, keselamatan siber, rangkaian, telefoni PABX dan analitik AI — dibina untuk skala dan ketahanan.",
+                },
+                bullets: [
+                    { en: "Servers, networks, cybersecurity & DR/BCP", bm: "Server, rangkaian, keselamatan siber & DR/BCP" },
+                    { en: "Cloud, ERP & SaaS development", bm: "Cloud, ERP & pembangunan SaaS" },
+                    { en: "PABX, SIP, IP telephony & smart city", bm: "PABX, SIP, telefoni IP & bandar pintar" },
+                    { en: "AI, data analytics & managed ICT", bm: "AI, analitik data & ICT terurus" },
+                ],
+            },
+            {
+                key: "production",
+                icon: "Video",
+                title: { en: "Production & Equipment Rental", bm: "Produksi & Sewaan Peralatan" },
+                summary: {
+                    en: "Professional cinematography, event production support and rental of premium production, staging and construction equipment.",
+                    bm: "Sinematografi profesional, sokongan produksi majlis dan penyewaan peralatan produksi, pentas dan pembinaan premium.",
+                },
+                bullets: [
+                    { en: "Corporate & event videography", bm: "Videografi korporat & majlis" },
+                    { en: "Drone, cinema cameras & lighting kits", bm: "Dron, kamera sinema & kit pencahayaan" },
+                    { en: "Staging, audio & visual production", bm: "Pentas, produksi audio & visual" },
+                    { en: "Construction equipment rental", bm: "Sewaan peralatan pembinaan" },
+                ],
+                videoComingSoon: true,
+            },
+            {
+                key: "corporate-gift",
+                icon: "Gift",
+                title: { en: "Corporate Gifts & Printing", bm: "Hadiah Korporat & Cetakan" },
+                summary: {
+                    en: "Curated corporate gifting and full-service printing — brochures, signage, packaging and branded merchandise crafted to brand standards.",
+                    bm: "Hadiah korporat terpilih dan cetakan menyeluruh — risalah, papan tanda, pembungkusan dan barangan berjenama mengikut piawai jenama.",
+                },
+                bullets: [
+                    { en: "Curated premium corporate gifts", bm: "Hadiah korporat premium terpilih" },
+                    { en: "Brochures, catalogues & annual reports", bm: "Risalah, katalog & laporan tahunan" },
+                    { en: "Signage, banners & event collateral", bm: "Papan tanda, banner & koleteral majlis" },
+                    { en: "Branded merchandise & packaging", bm: "Barangan berjenama & pembungkusan" },
+                ],
+            },
+            {
+                key: "ev-charger",
+                icon: "PlugZap",
+                title: { en: "EV Charger Supply & Installation", bm: "Bekalan & Pemasangan EV Charger" },
+                summary: {
+                    en: "Supply, installation and commissioning of AC and DC EV charging stations for residential, commercial and fleet applications — certified to Malaysian standards.",
+                    bm: "Bekalan, pemasangan dan tauliah stesen pengecas EV AC dan DC untuk aplikasi kediaman, komersial dan armada — bertauliah mengikut piawai Malaysia.",
+                },
+                bullets: [
+                    { en: "AC Level-2 & DC fast chargers", bm: "Pengecas AC Tahap-2 & DC pantas" },
+                    { en: "Site assessment & load study", bm: "Penilaian tapak & kajian beban" },
+                    { en: "Installation, testing & commissioning", bm: "Pemasangan, ujian & tauliah" },
+                    { en: "Fleet & multi-unit deployment", bm: "Pelaksanaan armada & berbilang unit" },
+                ],
+            },
+            {
+                key: "laundry",
+                icon: "Shirt",
+                title: { en: "Professional Laundry Solutions", bm: "Penyelesaian Dobi Profesional" },
+                summary: {
+                    en: "Industrial-grade laundry equipment supply, installation and operations consulting for hotels, hospitals, laundromats and institutional clients.",
+                    bm: "Pembekalan peralatan dobi gred industri, pemasangan dan konsultansi operasi untuk hotel, hospital, dobi layan diri dan pelanggan institusi.",
+                },
+                bullets: [
+                    { en: "Industrial washers, dryers & ironers", bm: "Mesin basuh, pengering & seterika industri" },
+                    { en: "Hospitality & healthcare laundry systems", bm: "Sistem dobi hospitaliti & kesihatan" },
+                    { en: "Operations & layout consultancy", bm: "Konsultansi operasi & susun atur" },
+                    { en: "After-sales support & maintenance", bm: "Sokongan selepas jualan & penyelenggaraan" },
+                ],
+            },
+        ],
     },
     capabilities: {
         eyebrow: { en: "Signature Capabilities", bm: "Keupayaan Tanda Tangan" },

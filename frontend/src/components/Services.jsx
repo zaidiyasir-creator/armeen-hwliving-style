@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
-import { HardHat, ServerCog } from "lucide-react";
+import { HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt, Plus, Minus, Clapperboard } from "lucide-react";
+
+const iconMap = { HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt };
 
 const Services = () => {
-    const { t } = useLang();
-    const [tab, setTab] = useState("construction");
-
-    const section = tab === "construction" ? content.services.construction : content.services.it;
+    const { t, lang } = useLang();
+    const [open, setOpen] = useState(0); // first division expanded by default
 
     return (
         <section id="services" className="relative py-28 md:py-40 bg-[#0a0a0a] border-y border-[#1a1a1a]" data-testid="services-section">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+                {/* Header */}
                 <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 reveal">
                     <div>
                         <p className="eyebrow mb-6">{t(content.services.eyebrow)}</p>
@@ -20,67 +21,106 @@ const Services = () => {
                         </h2>
                         <p className="mt-8 max-w-2xl text-gray-400 font-light text-lg leading-relaxed">{t(content.services.sub)}</p>
                     </div>
+                    <div className="hidden lg:block text-right text-[10px] uppercase tracking-[0.4em] text-gray-600">
+                        {lang === "en" ? "Seven Divisions" : "Tujuh Bahagian"}
+                        <div className="mt-2 font-serif text-[#E9B949] text-3xl">07</div>
+                    </div>
                 </div>
 
-                {/* Tab switcher */}
-                <div className="mt-16 flex flex-col sm:flex-row gap-0 border-y border-[#27272A]" data-testid="services-tabs">
-                    <button
-                        onClick={() => setTab("construction")}
-                        data-testid="tab-construction"
-                        className={`flex-1 flex items-center gap-4 py-6 px-6 text-left transition-all duration-500 group ${
-                            tab === "construction" ? "bg-[#111111]" : "hover:bg-[#0e0e0e]"
-                        }`}
-                    >
-                        <HardHat className={`w-5 h-5 ${tab === "construction" ? "text-[#E9B949]" : "text-gray-500"}`} />
-                        <div>
-                            <p className="eyebrow mb-1" style={{ color: tab === "construction" ? "#E9B949" : "#6B7280" }}>
-                                01 / Discipline
-                            </p>
-                            <p className={`font-serif text-xl md:text-2xl ${tab === "construction" ? "text-white" : "text-gray-500"}`}>
-                                {t(content.services.construction.heading)}
-                            </p>
-                        </div>
-                    </button>
-                    <div className="hidden sm:block w-px bg-[#27272A]"></div>
-                    <button
-                        onClick={() => setTab("it")}
-                        data-testid="tab-it"
-                        className={`flex-1 flex items-center gap-4 py-6 px-6 text-left transition-all duration-500 group ${
-                            tab === "it" ? "bg-[#111111]" : "hover:bg-[#0e0e0e]"
-                        }`}
-                    >
-                        <ServerCog className={`w-5 h-5 ${tab === "it" ? "text-[#E9B949]" : "text-gray-500"}`} />
-                        <div>
-                            <p className="eyebrow mb-1" style={{ color: tab === "it" ? "#E9B949" : "#6B7280" }}>
-                                02 / Discipline
-                            </p>
-                            <p className={`font-serif text-xl md:text-2xl ${tab === "it" ? "text-white" : "text-gray-500"}`}>
-                                {t(content.services.it.heading)}
-                            </p>
-                        </div>
-                    </button>
-                </div>
+                {/* Divisions accordion */}
+                <div className="mt-16 border-t border-[#1a1a1a]" data-testid="services-divisions">
+                    {content.services.divisions.map((d, i) => {
+                        const Icon = iconMap[d.icon] || HardHat;
+                        const isOpen = open === i;
+                        return (
+                            <div
+                                key={d.key}
+                                className={`border-b border-[#1a1a1a] transition-colors duration-500 ${isOpen ? "bg-[#0f0f0f]" : "hover:bg-[#0d0d0d]"}`}
+                                data-testid={`division-${d.key}`}
+                            >
+                                {/* Row header */}
+                                <button
+                                    onClick={() => setOpen(isOpen ? -1 : i)}
+                                    className="w-full grid grid-cols-12 items-center gap-4 py-8 md:py-10 px-2 md:px-4 text-left"
+                                    data-testid={`division-toggle-${d.key}`}
+                                    aria-expanded={isOpen}
+                                >
+                                    <div className="col-span-2 md:col-span-1 flex items-center gap-3">
+                                        <span className="font-serif text-[#E9B949]/60 text-sm tracking-[0.32em]">
+                                            {String(i + 1).padStart(2, "0")}
+                                        </span>
+                                    </div>
+                                    <div className="col-span-2 md:col-span-1 hidden md:flex">
+                                        <Icon className={`w-5 h-5 ${isOpen ? "text-[#E9B949]" : "text-gray-500"} transition-colors`} />
+                                    </div>
+                                    <div className="col-span-8 md:col-span-8">
+                                        <h3 className={`font-serif text-2xl md:text-[32px] leading-tight tracking-tight transition-colors ${isOpen ? "text-white" : "text-gray-300"}`}>
+                                            {t(d.title)}
+                                        </h3>
+                                    </div>
+                                    <div className="col-span-2 md:col-span-2 flex justify-end">
+                                        <span
+                                            className={`w-10 h-10 border flex items-center justify-center transition-all duration-500 ${
+                                                isOpen
+                                                    ? "border-[#E9B949] bg-[#E9B949] text-[#050505]"
+                                                    : "border-[#27272A] text-gray-500"
+                                            }`}
+                                        >
+                                            {isOpen ? <Minus size={14} /> : <Plus size={14} />}
+                                        </span>
+                                    </div>
+                                </button>
 
-                {/* Items grid */}
-                <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#1a1a1a]" data-testid="services-items">
-                    {section.items.map((item, i) => (
-                        <div
-                            key={i}
-                            className="group relative bg-[#0a0a0a] p-8 md:p-10 transition-all duration-500 hover:bg-[#111111]"
-                            data-testid={`service-${tab}-${i}`}
-                        >
-                            <div className="font-serif text-[10px] uppercase tracking-[0.4em] text-[#E9B949]">
-                                {String(i + 1).padStart(2, "0")}
+                                {/* Expanded body */}
+                                <div
+                                    className={`grid transition-all duration-700 ease-out overflow-hidden ${
+                                        isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                                    }`}
+                                >
+                                    <div className="min-h-0">
+                                        <div className="pb-12 px-2 md:px-4 grid grid-cols-1 md:grid-cols-12 gap-10">
+                                            <div className="md:col-span-7 md:col-start-3">
+                                                <p className="text-lg md:text-xl text-gray-300 font-light leading-relaxed">
+                                                    {t(d.summary)}
+                                                </p>
+
+                                                {/* Coming soon video placeholder for production */}
+                                                {d.videoComingSoon && (
+                                                    <div className="mt-8 flex items-center gap-4 border border-[#E9B949]/20 bg-[#E9B949]/5 px-5 py-4">
+                                                        <Clapperboard className="w-5 h-5 text-[#E9B949]" />
+                                                        <div>
+                                                            <p className="eyebrow mb-1">{lang === "en" ? "Reel — Coming Soon" : "Reel — Akan Datang"}</p>
+                                                            <p className="text-sm text-gray-400 font-light">
+                                                                {lang === "en"
+                                                                    ? "Production showreel by our in-house cinematographer to be added shortly."
+                                                                    : "Showreel produksi oleh sinematografer dalaman kami akan ditambah tidak lama lagi."}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="md:col-span-3">
+                                                <p className="eyebrow mb-5">{lang === "en" ? "Capabilities" : "Keupayaan"}</p>
+                                                <ul className="space-y-3">
+                                                    {d.bullets.map((b, bi) => (
+                                                        <li
+                                                            key={bi}
+                                                            className="flex items-start gap-3 text-gray-400 font-light text-[15px] leading-snug"
+                                                            data-testid={`division-${d.key}-bullet-${bi}`}
+                                                        >
+                                                            <span className="text-[#E9B949] mt-1.5 flex-shrink-0">—</span>
+                                                            <span>{t(b)}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 className="font-serif text-2xl md:text-[26px] text-white mt-6 leading-tight">
-                                {t(item.title)}
-                            </h3>
-                            <p className="mt-5 text-gray-400 font-light leading-relaxed text-[15px]">
-                                {t(item.desc)}
-                            </p>
-                            <div className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full bg-[#E9B949] transition-all duration-700"></div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </section>
