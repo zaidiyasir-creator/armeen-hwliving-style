@@ -1,9 +1,10 @@
 import React from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
+import { Download } from "lucide-react";
 
 const About = () => {
-    const { t } = useLang();
+    const { t, lang } = useLang();
     return (
         <section id="about" className="relative py-28 md:py-40" data-testid="about-section">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
@@ -15,6 +16,23 @@ const About = () => {
                             {t(content.about.title)}
                         </h2>
                         <span className="gold-rule mt-10 block"></span>
+
+                        {/* Download Company Profile */}
+                        <a
+                            href="/armeen/company-profile.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                            className="mt-10 inline-flex items-center gap-4 group"
+                            data-testid="download-profile-pdf"
+                        >
+                            <span className="w-12 h-12 border border-[#E9B949]/40 flex items-center justify-center text-[#E9B949] group-hover:bg-[#E9B949] group-hover:text-[#050505] transition-all duration-500">
+                                <Download size={16} />
+                            </span>
+                            <span className="text-[11px] uppercase tracking-[0.28em] text-gray-300 group-hover:text-[#E9B949] transition-colors">
+                                {lang === "en" ? "Download Company Profile (PDF)" : "Muat Turun Profil Syarikat (PDF)"}
+                            </span>
+                        </a>
                     </div>
 
                     {/* Right column */}

@@ -1,0 +1,42 @@
+{
+  "summary": "Frontend-only re-test of Armeen HW Enterprise marketing site after iteration 2 additions (project detail routes, PDF download, testimonials + client wall, Google Maps embed, WhatsApp FAB). All 14 functional checks PASS at desktop (1920x1080) and mobile (390x844). Zero console errors, zero page errors. PDF asset returns HTTP 200 (29MB, content-type application/pdf).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_results": {
+    "home_sections_intact": "PASS - all 9 sections (#about, #services, #capabilities, #portfolio, #industries, #testimonials, #certifications, #leadership, #contact) present",
+    "hero_loads": "PASS - 'Building Excellence. Engineering Futures.' h1 rendered",
+    "download_pdf_link": "PASS - data-testid=download-profile-pdf has href=/armeen/company-profile.pdf; curl HEAD returns 200 application/pdf (29.3MB)",
+    "testimonials_section": "PASS - testimonial-0..2 cards present; client-wall renders client-0..6 (7 names: Bangi Heights Development, DS Consultant, Jurukur Teras, UM Land, Zaharah Kidam Foundation, Masjid Tuanku Ja'afar, BHDSB Group)",
+    "contact_map_iframe": "PASS - data-testid=contact-map renders iframe with non-empty src pointing to google.com/maps?q=Betaria+Business+Center...",
+    "whatsapp_fab_visible_after_2s": "PASS - data-testid=whatsapp-fab visible at bottom-right (x=1660, y=1004) on desktop after ~2s delay",
+    "whatsapp_card_opens_with_cta": "PASS - clicking FAB opens whatsapp-card; whatsapp-start-chat href = https://wa.me/60193367316?text=...",
+    "portfolio_card_navigates": "PASS - portfolio-item-0 href=/projects/rumah-gadang-chalet-jempol; navigation successful",
+    "project_detail_renders": "PASS - project-title, project-category, project-meta-0..3 (location/client/year/scope), 4 highlights, project-gallery with 4 imgs, prev-project + next-project links all present",
+    "back_link_to_portfolio": "PASS - back-link href='/#portfolio'",
+    "invalid_slug_redirects_home": "PASS - /projects/does-not-exist redirected to /",
+    "prev_next_project_navigation": "PASS - next-project href=/projects/rumah-gadang-batu-kikir (correct next slug in list)",
+    "language_switch_on_detail_page": "PASS - clicking BM toggles project-title EN 'Rumah Gadang & 6-Chalet Resort, Jempol' -> BM 'Rumah Gadang & 6 Chalet Resort, Jempol'",
+    "no_console_errors": "PASS - 0 console errors, 0 page errors across home + project detail navigation flows",
+    "mobile_390_responsiveness": "PASS - whatsapp-fab visible on 390x844; mobile-menu-toggle opens mobile-nav with all anchors and EN/BM switch"
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Portfolio.jsx 'Explore All Projects' CTA hardcodes link to /projects/rumah-gadang-chalet-jempol — minor UX nit; could route to a future /projects index page instead of the first project. Not blocking.",
+    "Contact.jsx Google Maps iframe relies on external google.com/maps embed; in air-gapped or strict CSP environments it could be blocked. Currently loads fine.",
+    "WhatsAppFAB animate-ping yellow dot may be visually noisy long-term; acceptable for current CTA emphasis.",
+    "ProjectDetail.jsx uses idx wrap-around for prev/next — first project's 'previous' wraps to the last and vice versa, which is intentional and works correctly.",
+    "PDF (29MB) is served from /armeen/company-profile.pdf — large download but link uses target=_blank and download attribute; consider compression in future."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (not in scope)", "frontend": "100% (14/14 checks)"},
+  "test_credentials": "N/A - static marketing site, no auth",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Static bilingual marketing site, React Router with two routes: / and /projects/:slug. WhatsAppFAB is always-mounted at App root (works on both routes). PDF lives at /app/frontend/public/armeen/company-profile.pdf. Note that selector [data-testid^='client-'] matches both client-wall container AND client-0..6 (8 total); use [data-testid^='client-'][data-testid!='client-wall'] or [data-testid^='client-0'],[data-testid^='client-1']... if filtering. Public URL: https://luxury-hotel-portal-4.preview.emergentagent.com."
+}
