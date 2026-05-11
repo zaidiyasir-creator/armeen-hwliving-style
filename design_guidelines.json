@@ -1,0 +1,119 @@
+{
+  "theme": {
+    "archetype": "5 (Jewel & Luxury)",
+    "mode": "dark",
+    "description": "Premium corporate/hospitality-inspired theme imitating the luxurious, editorial feel of the St Regis hotel. Dominated by a cinematic black canvas, refined grey typography, and elegant warm gold/yellow accents."
+  },
+  "colors": {
+    "background": {
+      "primary": "#050505",
+      "secondary": "#0F0F0F",
+      "surface": "#141414"
+    },
+    "text": {
+      "primary": "#F3F4F6",
+      "secondary": "#9CA3AF",
+      "muted": "#6B7280"
+    },
+    "accent": {
+      "primary": "#E9B949",
+      "primary_hover": "#D4A338",
+      "subtle": "rgba(233, 185, 73, 0.2)"
+    },
+    "border": {
+      "default": "#27272A",
+      "accent": "rgba(233, 185, 73, 0.3)"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Cormorant Garamond, serif",
+      "body": "Manrope, sans-serif"
+    },
+    "hierarchy": {
+      "h1": "text-5xl md:text-6xl+ font-light tracking-tight leading-tight",
+      "h2": "text-3xl md:text-5xl font-light tracking-tight leading-tight",
+      "h3": "text-2xl md:text-3xl font-light",
+      "h4": "text-xl md:text-2xl font-light",
+      "body": "text-base leading-relaxed text-gray-400 font-light",
+      "eyebrow": "text-xs md:text-sm uppercase tracking-[0.2em] text-[#E9B949] font-medium"
+    },
+    "rules": "Never use Inter or default generic fonts for headings. Use wide tracking for uppercase labels and tight tracking for large headings. Keep weights thin or light for editorial feel."
+  },
+  "spacing": {
+    "section": "py-24 md:py-32",
+    "container": "max-w-7xl mx-auto px-6 md:px-12",
+    "gap": {
+      "standard": "gap-8",
+      "large": "gap-16",
+      "editorial": "gap-24"
+    }
+  },
+  "layout_strategies": {
+    "bento_editorial": "Mix of dense content grids and wide cinematic images. Use thin 1px borders (#27272A) for separation instead of heavy cards.",
+    "asymmetry": "Offset text blocks from images. Leave breathing room. Never center everything.",
+    "thin_rules": "Use thin horizontal and vertical rules (borders) mimicking high-end print magazines. A 1px subtle yellow line `border-[#E9B949]/30` as a section divider is encouraged."
+  },
+  "components": {
+    "header": {
+      "style": "fixed w-full z-50 bg-[#050505]/80 backdrop-blur-xl border-b border-[#E9B949]/20 transition-all duration-500",
+      "elements": "Brand text left, centered nav links (hidden on mobile), language switcher (BM / EN) and minimal CTA right. Thin golden underline on link hover."
+    },
+    "hero": {
+      "style": "h-screen min-h-[800px] relative flex items-center justify-center text-center",
+      "overlay": "bg-gradient-to-b from-[#050505]/40 via-[#050505]/60 to-[#050505]",
+      "content": "Cinematic dark background image, uppercase eyebrow, massive serif H1 'Building Excellence. Engineering Futures.', minimal gold-accented call to action button."
+    },
+    "buttons": {
+      "primary": "px-8 py-3 border border-[#E9B949] text-[#E9B949] hover:bg-[#E9B949] hover:text-[#050505] transition-colors duration-300 uppercase tracking-widest text-xs",
+      "text_link": "text-white hover:text-[#E9B949] relative after:content-[''] after:absolute after:w-full after:scale-x-0 hover:after:scale-x-100 after:h-[1px] after:bottom-0 after:left-0 after:bg-[#E9B949] after:origin-bottom-right hover:after:origin-bottom-left after:transition-transform after:duration-300"
+    },
+    "cards": {
+      "service": "group relative overflow-hidden border border-[#27272A] p-8 hover:border-[#E9B949]/50 transition-colors duration-500 bg-[#0F0F0F]",
+      "project": "group relative aspect-[4/5] overflow-hidden"
+    },
+    "footer": {
+      "style": "bg-[#050505] pt-32 pb-12 border-t border-[#E9B949]/20",
+      "content": "Minimalist grid, large brand typography, thin rules between columns."
+    }
+  },
+  "motion": {
+    "general": "Slow, deliberate, cinematic. No fast bouncing.",
+    "reveal": "Use framer-motion for smooth 1s opacity & slight y-axis translation reveals on scroll.",
+    "hover": "Subtle image scaling (`group-hover:scale-105`), border color transitions."
+  },
+  "assets": {
+    "local_images": [
+      "/armeen/p46_i2.png",
+      "/armeen/p48_i2.png",
+      "/armeen/p49_i2.png",
+      "/armeen/p50_i2.png",
+      "/armeen/p51_i2.png",
+      "/armeen/p52_i2.png",
+      "/armeen/p53_i2.png"
+    ],
+    "stock_images": {
+      "it_servers": "https://images.pexels.com/photos/17323801/pexels-photo-17323801.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "cybersecurity": "https://images.pexels.com/photos/5203849/pexels-photo-5203849.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "smart_city": "https://images.unsplash.com/photo-1747499967281-c0c5eec9933c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHwyfHxzbWFydCUyMGNpdHklMjBuaWdodHxlbnwwfHx8fDE3NzgzMzM3Njd8MA&ixlib=rb-4.1.0&q=85",
+      "fiber_optic": "https://images.unsplash.com/photo-1604869515882-4d10fa4b0492?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwyfHxmaWJlciUyMG9wdGljJTIwbmV0d29ya3xlbnwwfHx8fDE3Nzg0ODIzNzZ8MA&ixlib=rb-4.1.0&q=85"
+    }
+  },
+  "content_structure": {
+    "bilingual_support": "Implement a simple language state (BM/EN). Use a context or just inline conditional rendering to switch text. Default to EN.",
+    "sections": [
+      "Hero: Cinematic entrance, brand name ARMEEN HW ENTERPRISE",
+      "About: Heritage, Vision & Mission, Quality Policy",
+      "Services: Two distinct divisions - (a) Construction & Civil Engineering, (b) IT Solutions & Digital Infrastructure",
+      "Signature Capabilities: Innovation, Compliance, End-to-End, Bumiputera, CIDB G2",
+      "Portfolio: Grid of local construction project photos (p46_i2.png to p53_i2.png)",
+      "Certifications: Text list or minimal badge design of SSM, CIDB G2, MOF, MEDAC, LHDN TCC, NIOSH",
+      "Leadership: Founder Nasrul Izzam bin Abdul Kuddus",
+      "Industries: Government, Smart Townships, Telco, etc.",
+      "Contact: Phone, email, Seremban address. No form."
+    ]
+  },
+  "accessibility_and_testing": {
+    "testing": "All interactive elements (buttons, links, nav items, language toggles) MUST have `data-testid` attributes in kebab-case."
+  }
+}
