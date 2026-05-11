@@ -96,3 +96,14 @@ Test results:
 
 **Test results:**
 - iteration_4.json — Backend 20/20 PASS, Frontend 100% critical flows PASS, zero console errors
+
+## Iteration 6 (2025-12) — Header Dropdowns + EV Showcase
+- ✅ EV Charger division: EVOLVE EV Charger image showcase with "Enquire About Installation" CTA
+- ✅ Header restructured with dropdown submenus:
+  - **About** → The Practice, Leadership
+  - **Services** → all 7 divisions (2-column 01-07 layout)
+  - **Credentials** → Certifications, Testimonials
+- ✅ Hash-based auto-open: clicking a Services submenu item navigates to /#services-<key>, scrolls to that division and opens its accordion
+- ✅ Mobile menu nested with expandable sub-drawers
+- ✅ Silenced harmless 401 console noise on public pages (AuthContext only probes /me when token exists)
+- iteration_5.json — 12/12 frontend PASS on desktop + mobile
