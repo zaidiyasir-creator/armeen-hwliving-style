@@ -107,3 +107,8 @@ Test results:
 - ✅ Mobile menu nested with expandable sub-drawers
 - ✅ Silenced harmless 401 console noise on public pages (AuthContext only probes /me when token exists)
 - iteration_5.json — 12/12 frontend PASS on desktop + mobile
+
+## Iteration 7 (2025-12)
+- ✅ Strategic Alliance section added (between Industries and Testimonials) — IZH Padu Resources Sdn. Bhd. as Strategic Partner, links to www.izhpadu.com
+- ✅ Scheduled publish for News — datetime-local picker in admin; backend filters `published_at > now` from public list; admin status badge: Scheduled / Published / Draft
+- ✅ Reveal animation bug fixed (MutationObserver re-attaches to async-rendered cards) — Portfolio now visible

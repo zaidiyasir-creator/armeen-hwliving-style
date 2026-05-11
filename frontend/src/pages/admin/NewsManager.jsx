@@ -9,6 +9,7 @@ const empty = () => ({
     cover_image: "",
     tag: { en: "", bm: "" },
     published: true,
+    published_at: new Date().toISOString().slice(0, 16), // YYYY-MM-DDTHH:mm
 });
 
 const Field = ({ label, children }) => (
@@ -85,10 +86,15 @@ const NewsManager = () => {
     const save = async () => {
         setBusy(true); setMsg("");
         try {
+            const payload = { ...editing };
+            // Normalize datetime-local back to ISO with Z (UTC)
+            if (payload.published_at && payload.published_at.length === 16) {
+                payload.published_at = new Date(payload.published_at).toISOString();
+            }
             if (editing.id) {
-                await api.put(`/news/${editing.id}`, editing);
+                await api.put(`/news/${editing.id}`, payload);
             } else {
-                await api.post("/news", editing);
+                await api.post("/news", payload);
             }
             setEditing(null);
             await load();
@@ -120,7 +126,10 @@ const NewsManager = () => {
             {!editing && (
                 <div className="space-y-3" data-testid="news-list">
                     {items.length === 0 && <p className="text-gray-500 font-light">No news yet. Click "New" to create your first announcement.</p>}
-                    {items.map((n) => (
+                    {items.map((n) => {
+                        const pubAt = n.published_at ? new Date(n.published_at) : null;
+                        const scheduled = n.published && pubAt && pubAt > new Date();
+                        return (
                         <div key={n.id} className="flex items-center gap-4 border border-[#1a1a1a] bg-[#0a0a0a] p-4" data-testid={`news-row-${n.id}`}>
                             {n.cover_image && (
                                 <img src={resolveAsset(n.cover_image)} alt="" className="w-20 h-14 object-cover border border-[#27272A] flex-shrink-0" />
@@ -128,14 +137,18 @@ const NewsManager = () => {
                             <div className="flex-1 min-w-0">
                                 <p className="font-serif text-lg text-white truncate">{n.title?.en}</p>
                                 <p className="text-xs text-gray-500 truncate">{n.excerpt?.en}</p>
-                                <p className="mt-1 text-[10px] uppercase tracking-[0.28em] text-gray-600">
-                                    {n.published ? "Published" : "Draft"} · {(n.published_at || "").slice(0, 10)}
+                                <p className="mt-1 text-[10px] uppercase tracking-[0.28em] text-gray-600 flex items-center gap-2">
+                                    <span className={scheduled ? "text-[#E9B949]" : n.published ? "text-green-500/80" : "text-gray-500"}>
+                                        {scheduled ? "Scheduled" : n.published ? "Published" : "Draft"}
+                                    </span>
+                                    <span>·</span>
+                                    <span>{pubAt ? pubAt.toLocaleString() : ""}</span>
                                 </p>
                             </div>
-                            <button onClick={() => setEditing(n)} className="text-gray-400 hover:text-[#E9B949]" data-testid={`news-edit-${n.id}`}><Edit3 size={16} /></button>
+                            <button onClick={() => setEditing({ ...n, published_at: pubAt ? new Date(pubAt.getTime() - pubAt.getTimezoneOffset() * 60000).toISOString().slice(0,16) : "" })} className="text-gray-400 hover:text-[#E9B949]" data-testid={`news-edit-${n.id}`}><Edit3 size={16} /></button>
                             <button onClick={() => del(n.id)} className="text-gray-400 hover:text-red-400" data-testid={`news-delete-${n.id}`}><Trash2 size={16} /></button>
                         </div>
-                    ))}
+                    );})}
                 </div>
             )}
 
@@ -151,10 +164,24 @@ const NewsManager = () => {
                     <Field label="Excerpt"><BiInput value={editing.excerpt} onChange={(v) => setEditing({ ...editing, excerpt: v })} type="textarea" placeholder="Short excerpt" /></Field>
                     <Field label="Body"><BiInput value={editing.body} onChange={(v) => setEditing({ ...editing, body: v })} type="textarea" placeholder="Full body" /></Field>
                     <Field label="Cover Image"><ImageInput value={editing.cover_image} onChange={(v) => setEditing({ ...editing, cover_image: v })} /></Field>
+
+                    <Field label="Publish Date & Time (future date = scheduled)">
+                        <input
+                            type="datetime-local"
+                            value={editing.published_at || ""}
+                            onChange={(e) => setEditing({ ...editing, published_at: e.target.value })}
+                            className="w-full bg-transparent border border-[#27272A] focus:border-[#E9B949] text-white px-3 py-2.5 text-sm outline-none"
+                            data-testid="news-publish-at"
+                        />
+                        <p className="mt-2 text-[10px] uppercase tracking-[0.28em] text-gray-600">
+                            Set a future date to schedule auto-publish · Site time treated as UTC
+                        </p>
+                    </Field>
+
                     <Field label="Status">
                         <label className="flex items-center gap-3 text-gray-300">
                             <input type="checkbox" checked={editing.published} onChange={(e) => setEditing({ ...editing, published: e.target.checked })} />
-                            Published (visible on website)
+                            Published (visible on website when publish date is reached)
                         </label>
                     </Field>
 

@@ -251,8 +251,19 @@ async def upload_file(file: UploadFile = File(...), user=Depends(get_current_use
 
 
 @api.get("/news")
-async def list_news(only_published: bool = True):
-    query = {"published": True} if only_published else {}
+async def list_news(only_published: bool = True, include_scheduled: bool = False):
+    if only_published:
+        now_iso = datetime.now(timezone.utc).isoformat()
+        # Public: published AND (published_at <= now)  — scheduled future posts excluded
+        query = {"published": True}
+        if not include_scheduled:
+            query["$or"] = [
+                {"published_at": {"$lte": now_iso}},
+                {"published_at": {"$exists": False}},
+                {"published_at": None},
+            ]
+    else:
+        query = {}
     docs = await db.news.find(query, {"_id": 0}).sort("published_at", -1).to_list(200)
     return docs
 

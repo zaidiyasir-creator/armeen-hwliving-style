@@ -12,6 +12,7 @@ import Portfolio from "./components/Portfolio";
 import News from "./components/News";
 import Industries from "./components/Industries";
 import Testimonials from "./components/Testimonials";
+import PartnerAlliance from "./components/PartnerAlliance";
 import Certifications from "./components/Certifications";
 import Leadership from "./components/Leadership";
 import Contact from "./components/Contact";
@@ -52,6 +53,7 @@ const Home = () => {
                 <Portfolio />
                 <News />
                 <Industries />
+                <PartnerAlliance />
                 <Testimonials />
                 <Certifications />
                 <Leadership />
