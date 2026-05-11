@@ -35,6 +35,7 @@ const Header = () => {
     const aboutItems = [
         { href: "/#about", label: { en: "The Practice", bm: "Falsafah Kami" } },
         { href: "/#leadership", label: { en: "Leadership", bm: "Kepimpinan" } },
+        { href: "/#news", label: { en: "Latest News", bm: "Berita Terkini" } },
     ];
 
     const serviceItems = content.services.divisions.map((d) => ({
