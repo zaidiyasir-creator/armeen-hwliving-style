@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 export function useReveal() {
     useEffect(() => {
-        const els = document.querySelectorAll(".reveal");
         const io = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -12,9 +11,28 @@ export function useReveal() {
                     }
                 });
             },
-            { threshold: 0.12 },
+            { threshold: 0.08 },
         );
-        els.forEach((el) => io.observe(el));
-        return () => io.disconnect();
+
+        const observed = new WeakSet();
+        const observeAll = () => {
+            document.querySelectorAll(".reveal").forEach((el) => {
+                if (!observed.has(el) && !el.classList.contains("in")) {
+                    observed.add(el);
+                    io.observe(el);
+                }
+            });
+        };
+
+        observeAll();
+
+        // Watch the DOM for newly added .reveal elements (e.g. async-rendered cards)
+        const mo = new MutationObserver(() => observeAll());
+        mo.observe(document.body, { childList: true, subtree: true });
+
+        return () => {
+            io.disconnect();
+            mo.disconnect();
+        };
     }, []);
 }
