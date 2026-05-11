@@ -1,0 +1,37 @@
+{
+  "summary": "Frontend-only testing of Armeen HW Enterprise bilingual marketing site. All 12 requested functional checks passed at both desktop (1920x900) and mobile (390x844) viewports. No console errors, no broken images, no backend dependency.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_results": {
+    "site_loads_no_console_errors": "PASS (0 console errors/warnings; only Cloudflare cdn-cgi RUM scripts blocked, unrelated to app)",
+    "hero_serif_headline": "PASS - 'Building Excellence. Engineering Futures.' rendered in serif (default EN)",
+    "header_nav_anchors": "PASS - all 6 nav links (about, services, capabilities, portfolio, certifications, contact) present with correct href anchors; clicking nav-services scrolled services section into view",
+    "language_switcher_EN_BM": "PASS - eyebrow toggles: 'Established 2015 · Bumiputera Enterprise' <-> 'Ditubuhkan 2015 · Syarikat Bumiputera'",
+    "services_tab_switch": "PASS - construction tab shows 'Preliminary & Site Clearing'; tab-it switches grid to 'Smart City Solutions' (IT items rendered, construction items unmounted)",
+    "portfolio_6_cards_with_images": "PASS - portfolio-item-0..5 all present; all 6 images (p46_i2, p51_i2, p48_i2, p49_i2, p50_i2, p52_i2) loaded with naturalWidth > 0",
+    "certifications_six_codes": "PASS - SSM, CIDB G2, MOF, MEDAC, LHDN TCC, NIOSH all rendered",
+    "contact_display_only": "PASS - phone '019-336 7316', email 'armeeniza@gmail.com', Seremban address visible; 0 forms and 0 inputs in #contact",
+    "footer_registration": "PASS - 'NS0146183-A' present in footer",
+    "mobile_menu_toggle_400px": "PASS - mobile-menu-toggle visible at 390px, opens mobile-nav with all 6 anchors and EN/BM switch",
+    "no_broken_images": "PASS - all portfolio images loaded (naturalWidth: 1045, 768, 960, 1024, 960, 1143)"
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Hero <h1> uses two <span class='block'> which renders correctly but produced 'Building Excellence.Engineering Futures.' when read via text_content (no space between blocks). Visual rendering is correct (two lines). Not a bug.",
+    "Portfolio images use onError to hide broken images silently - acceptable for graceful degradation, all images currently present so not exercised.",
+    "All interactive elements have data-testid attributes - good testability hygiene.",
+    "i18n.js is a single large dictionary (~230 lines) - fine for current size but consider splitting per-section if it grows further."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (not in scope)", "frontend": "100%"},
+  "test_credentials": "N/A - static marketing site, no auth",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Static bilingual marketing site - no backend. All data-testids documented in /app/frontend/src/components/*.jsx. Public URL: https://luxury-hotel-portal-4.preview.emergentagent.com. Portfolio images served from /armeen/ folder in /app/frontend/public/."
+}
