@@ -161,6 +161,10 @@ export const content = {
                     { en: "Installation, testing & commissioning", bm: "Pemasangan, ujian & tauliah" },
                     { en: "Fleet & multi-unit deployment", bm: "Pelaksanaan armada & berbilang unit" },
                 ],
+                showcase: {
+                    image: "/armeen/ev/charger.png",
+                    caption: { en: "EVOLVE EV Charger — supplied & installed by Armeen HW", bm: "Pengecas EV EVOLVE — dibekal & dipasang oleh Armeen HW" },
+                },
             },
             {
                 key: "laundry",

@@ -24,6 +24,27 @@ const Services = () => {
         return () => { mounted = false; };
     }, []);
 
+    // Auto-open a division when URL hash matches "#services-<key>"
+    useEffect(() => {
+        const handler = () => {
+            const h = window.location.hash;
+            if (h && h.startsWith("#services-")) {
+                const key = h.replace("#services-", "");
+                const idx = content.services.divisions.findIndex((d) => d.key === key);
+                if (idx >= 0) {
+                    setOpen(idx);
+                    setTimeout(() => {
+                        const el = document.querySelector(`[data-testid='division-${key}']`);
+                        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 200);
+                }
+            }
+        };
+        handler();
+        window.addEventListener("hashchange", handler);
+        return () => window.removeEventListener("hashchange", handler);
+    }, []);
+
     const divisions = content.services.divisions.map((d) => {
         const ov = overrides[d.key];
         if (!ov) return d;
@@ -180,6 +201,35 @@ const Services = () => {
                                                                     </div>
                                                                 </a>
                                                             ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Product showcase (e.g. EV charger) */}
+                                                {d.showcase && (
+                                                    <div className="mt-10" data-testid={`division-${d.key}-showcase`}>
+                                                        <p className="eyebrow mb-5">{lang === "en" ? "Featured Product" : "Produk Pilihan"}</p>
+                                                        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-10 items-center border border-[#1a1a1a] bg-[#080808] p-6 md:p-8">
+                                                            <div className="md:col-span-2">
+                                                                <div className="relative aspect-square bg-[#050505] overflow-hidden">
+                                                                    <img
+                                                                        src={d.showcase.image}
+                                                                        alt={t(d.showcase.caption)}
+                                                                        className="absolute inset-0 w-full h-full object-cover"
+                                                                        loading="lazy"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="md:col-span-3 space-y-4">
+                                                                <span className="eyebrow">{lang === "en" ? "Showcase" : "Pameran"}</span>
+                                                                <p className="font-serif text-2xl md:text-3xl text-white leading-tight">{t(d.showcase.caption)}</p>
+                                                                <div className="pt-4">
+                                                                    <a href="#contact" className="btn-armeen-ghost">
+                                                                        {lang === "en" ? "Enquire About Installation" : "Bertanya Tentang Pemasangan"}
+                                                                        <span>→</span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 )}
