@@ -100,6 +100,13 @@ export const content = {
                     { en: "PABX, SIP, IP telephony & smart city", bm: "PABX, SIP, telefoni IP & bandar pintar" },
                     { en: "AI, data analytics & managed ICT", bm: "AI, analitik data & ICT terurus" },
                 ],
+                gallery: [
+                    { src: "/armeen/it/server-rack.png", label: { en: "Server Rack & Compute", bm: "Server Rack & Pengkomputeran" } },
+                    { src: "/armeen/it/network-infrastructure.png", label: { en: "Network Infrastructure", bm: "Infrastruktur Rangkaian" } },
+                    { src: "/armeen/it/cybersecurity.png", label: { en: "Cybersecurity", bm: "Keselamatan Siber" } },
+                    { src: "/armeen/it/noc-soc.png", label: { en: "NOC / SOC Services", bm: "Perkhidmatan NOC / SOC" } },
+                    { src: "/armeen/it/data-center.png", label: { en: "Data Center Facilities", bm: "Kemudahan Pusat Data" } },
+                ],
             },
             {
                 key: "production",

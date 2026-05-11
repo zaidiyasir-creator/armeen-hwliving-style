@@ -98,6 +98,34 @@ const Services = () => {
                                                         </div>
                                                     </div>
                                                 )}
+
+                                                {/* Image gallery (e.g. IT division) */}
+                                                {d.gallery && (
+                                                    <div className="mt-10" data-testid={`division-${d.key}-gallery`}>
+                                                        <p className="eyebrow mb-5">{lang === "en" ? "Capability Spotlight" : "Sorotan Keupayaan"}</p>
+                                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                                                            {d.gallery.map((g, gi) => (
+                                                                <figure
+                                                                    key={gi}
+                                                                    className={`group relative overflow-hidden border border-[#1a1a1a] bg-[#080808] ${gi === 0 ? "md:col-span-2 aspect-[16/9]" : "aspect-[4/3]"}`}
+                                                                    data-testid={`division-${d.key}-gallery-${gi}`}
+                                                                >
+                                                                    <img
+                                                                        src={g.src}
+                                                                        alt={t(g.label)}
+                                                                        loading="lazy"
+                                                                        className="hover-img absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
+                                                                    />
+                                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
+                                                                    <figcaption className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                                                                        <span className="text-[9px] uppercase tracking-[0.32em] text-[#E9B949]">{String(gi + 1).padStart(2, "0")}</span>
+                                                                        <p className="mt-1.5 font-serif text-base md:text-lg text-white leading-tight">{t(g.label)}</p>
+                                                                    </figcaption>
+                                                                </figure>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <div className="md:col-span-3">
