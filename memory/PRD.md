@@ -58,3 +58,17 @@ Architecture changes:
 
 Test results:
 - iteration_2.json — 14/14 frontend checks PASS, zero console errors
+
+## Iteration 3 (2025-12) — Services Restructure
+- ✅ Replaced 2-tab Services section with elegant 7-division accordion
+- Seven divisions (bilingual EN/BM with summary + 4 capability bullets each):
+  1. Construction & Interior Design
+  2. Electrical & Mechanical Engineering
+  3. IT Solutions & Digital Infrastructure
+  4. Production & Equipment Rental (with "Reel — Coming Soon" placeholder for video)
+  5. Corporate Gifts & Printing
+  6. EV Charger Supply & Installation
+  7. Professional Laundry Solutions
+- Single-open accordion with smooth grid-rows transition
+- Each division uses a unique lucide icon (HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt)
+- iteration_3.json — 100% PASS, no regressions
