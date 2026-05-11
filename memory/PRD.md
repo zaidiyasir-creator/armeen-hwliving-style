@@ -42,3 +42,19 @@
 - P2: Add testimonials / client logos strip
 - P2: Add Google Maps embed in Contact
 - P3: Hook contact form (if user later wants enquiries to be captured)
+
+## Iteration 2 (2025-12) — Completed
+- ✅ P1: Individual project detail pages at /projects/:slug (11 real projects from PDF with full meta, highlights, multi-image gallery, prev/next navigation)
+- ✅ P1: Downloadable Company Profile PDF button in About section (file: /armeen/company-profile.pdf)
+- ✅ P2: Testimonials section (3 editorial quote cards) + Selected Clients & Partners wall (7 client names)
+- ✅ P2: Google Maps embed in Contact section (Seremban office location)
+- ✅ Smart enhancement: WhatsApp floating CTA button (bottom-right, expandable card with pre-filled bilingual message, links to wa.me/60193367316)
+
+Architecture changes:
+- Added react-router-dom (BrowserRouter + ScrollToHash hash handler)
+- New routes: `/` (Home) and `/projects/:slug` (ProjectDetail)
+- WhatsAppFAB always mounted at App root (works on all routes)
+- 11 projects in /app/frontend/src/data/projects.js with bilingual content
+
+Test results:
+- iteration_2.json — 14/14 frontend checks PASS, zero console errors
