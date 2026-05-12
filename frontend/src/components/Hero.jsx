@@ -8,13 +8,13 @@ const Hero = () => {
     return (
         <section id="top" className="relative min-h-screen flex items-end overflow-hidden" data-testid="hero-section">
             {/* Background image */}
-            <div className="absolute inset-0">
+            <div className="absolute inset-0 overflow-hidden">
                 <picture>
                     <source srcSet="/armeen/hero.webp" type="image/webp" />
                     <img
                         src="/armeen/hero.png"
                         alt="Architectural skyline at night"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover ken-burns"
                     />
                 </picture>
                 <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/40 via-[#050505]/30 to-[#050505]" />

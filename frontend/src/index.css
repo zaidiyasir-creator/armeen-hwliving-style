@@ -166,6 +166,31 @@ body {
     width: 10px;
     height: 10px;
 }
+
+/* Slow Ken Burns drift for the hero hero image — gentle zoom + drift over 24s, ping-pong */
+@keyframes kenBurns {
+    0% {
+        transform: scale(1) translate3d(0, 0, 0);
+    }
+    50% {
+        transform: scale(1.08) translate3d(-1.5%, -1%, 0);
+    }
+    100% {
+        transform: scale(1) translate3d(0, 0, 0);
+    }
+}
+
+.ken-burns {
+    animation: kenBurns 24s ease-in-out infinite;
+    will-change: transform;
+    transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ken-burns {
+        animation: none;
+    }
+}
 ::-webkit-scrollbar-track {
     background: #0a0a0a;
 }
