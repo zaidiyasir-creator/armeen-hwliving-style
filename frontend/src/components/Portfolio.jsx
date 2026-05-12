@@ -19,7 +19,7 @@ const Portfolio = () => {
     const featured = projects.slice(0, 6);
 
     return (
-        <section id="portfolio" className="relative py-28 md:py-40 bg-[#080808] border-y border-[#1a1a1a]" data-testid="portfolio-section">
+        <section id="portfolio" className="relative py-28 md:py-40 bg-[#080808]/85 backdrop-blur-[2px] border-y border-[#1a1a1a]" data-testid="portfolio-section">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 reveal">
                     <div>

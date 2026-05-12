@@ -6,7 +6,7 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react";
 const Contact = () => {
     const { t, lang } = useLang();
     return (
-        <section id="contact" className="relative py-28 md:py-40 bg-[#080808] border-t border-[#1a1a1a]" data-testid="contact-section">
+        <section id="contact" className="relative py-28 md:py-40 bg-[#080808]/85 backdrop-blur-[2px] border-t border-[#1a1a1a]" data-testid="contact-section">
             <div className="absolute inset-0 opacity-30">
                 <img
                     src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=2000&q=80"
