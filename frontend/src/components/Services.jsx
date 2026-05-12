@@ -57,7 +57,7 @@ const Services = () => {
     });
 
     return (
-        <section id="services" className="relative py-28 md:py-40 bg-[#0a0a0a]/85 backdrop-blur-[2px] border-y border-[#1a1a1a]" data-testid="services-section">
+        <section id="services" className="relative py-28 md:py-40 bg-[#0a0a0a] border-y border-[#1a1a1a]" data-testid="services-section">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                 {/* Header */}
                 <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 reveal">

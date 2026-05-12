@@ -5,7 +5,7 @@ import { content } from "../i18n";
 const Leadership = () => {
     const { t } = useLang();
     return (
-        <section id="leadership" className="relative py-28 md:py-40 bg-[#080808]/85 backdrop-blur-[2px] border-y border-[#1a1a1a]" data-testid="leadership-section">
+        <section id="leadership" className="relative py-28 md:py-40 bg-[#080808] border-y border-[#1a1a1a]" data-testid="leadership-section">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 reveal">
                     <div className="lg:col-span-4">

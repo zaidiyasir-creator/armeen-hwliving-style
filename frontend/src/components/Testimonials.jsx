@@ -47,7 +47,7 @@ const testimonialContent = {
 const Testimonials = () => {
     const { t } = useLang();
     return (
-        <section id="testimonials" className="relative py-28 md:py-40 bg-[#050505]/40 backdrop-blur-[1px]" data-testid="testimonials-section">
+        <section id="testimonials" className="relative py-28 md:py-40" data-testid="testimonials-section">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                 <div className="max-w-3xl reveal">
                     <p className="eyebrow mb-6">{t(testimonialContent.eyebrow)}</p>

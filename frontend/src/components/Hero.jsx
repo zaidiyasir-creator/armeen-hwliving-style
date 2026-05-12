@@ -9,12 +9,15 @@ const Hero = () => {
         <section id="top" className="relative min-h-screen flex items-end overflow-hidden" data-testid="hero-section">
             {/* Background image */}
             <div className="absolute inset-0">
-                <img
-                    src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=2400&q=80"
-                    alt="Architectural facade at dusk"
-                    className="w-full h-full object-cover opacity-60"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-[#050505]/40 to-[#050505]" />
+                <picture>
+                    <source srcSet="/armeen/hero.webp" type="image/webp" />
+                    <img
+                        src="/armeen/hero.png"
+                        alt="Architectural skyline at night"
+                        className="w-full h-full object-cover"
+                    />
+                </picture>
+                <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/40 via-[#050505]/30 to-[#050505]" />
                 <div className="absolute inset-0 grain"></div>
             </div>
 

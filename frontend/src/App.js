@@ -18,7 +18,6 @@ import Leadership from "./components/Leadership";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import WhatsAppFAB from "./components/WhatsAppFAB";
-import BackgroundLayer from "./components/BackgroundLayer";
 import ProjectDetail from "./pages/ProjectDetail";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -77,7 +76,6 @@ function App() {
             <LanguageProvider>
                 <AuthProvider>
                     <BrowserRouter>
-                        <BackgroundLayer />
                         <ScrollToHash />
                         <Routes>
                             <Route path="/" element={<Home />} />

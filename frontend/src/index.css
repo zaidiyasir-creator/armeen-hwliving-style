@@ -14,23 +14,16 @@
     --armeen-border: #27272a;
 }
 
-html {
-    background: var(--armeen-bg);
-}
-
 html,
 body {
     margin: 0;
     padding: 0;
+    background: var(--armeen-bg);
     color: var(--armeen-text-2);
     font-family: "Manrope", system-ui, sans-serif;
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-    background: transparent;
 }
 
 * {
