@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Logo from "../components/Logo";
 import { LogOut, Newspaper, FolderKanban, LayoutGrid, ArrowUpRight } from "lucide-react";
 import NewsManager from "./admin/NewsManager";
 import ProjectsManager from "./admin/ProjectsManager";
@@ -28,16 +29,8 @@ const AdminDashboard = () => {
             <header className="border-b border-[#1a1a1a] bg-[#050505]/90 backdrop-blur-xl sticky top-0 z-40">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
                     <Link to="/admin" className="flex items-center gap-3">
-                        <span className="w-9 h-9 flex items-center justify-center bg-[#E9B949] text-[#050505]">
-                            <svg viewBox="0 0 32 32" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                <path d="M4 28 L16 6 L28 28 Z" />
-                                <path d="M11 28 V20 H21 V28" />
-                            </svg>
-                        </span>
-                        <div>
-                            <p className="font-serif text-lg text-white tracking-wider">ARMEEN <span className="italic">HW</span></p>
-                            <p className="text-[9px] uppercase tracking-[0.4em] text-gray-500">Admin Console</p>
-                        </div>
+                        <Logo className="h-12" />
+                        <span className="text-[9px] uppercase tracking-[0.4em] text-gray-500 hidden md:inline-block border-l border-[#27272A] pl-3">Admin Console</span>
                     </Link>
 
                     <div className="flex items-center gap-6">

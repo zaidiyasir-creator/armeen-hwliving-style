@@ -1,38 +1,77 @@
 import React, { useEffect, useRef } from "react";
 
 /**
- * Fixed cinematic background layer with subtle parallax drift.
- * The image slowly translates upward as the visitor scrolls — reinforcing
- * the architectural / "building upward" theme of the brand.
+ * Fixed cinematic background layer.
+ *  - Uses WebP (with PNG fallback via <picture>) for fast first paint.
+ *  - Subtle scroll parallax drift (~8% of scroll, max 80px upward).
+ *  - Subtle mouse-tilt (rotateY ±0.5°, rotateX ±0.3°) — like looking up at a real skyscraper.
+ *  - Parallax + tilt are DISABLED on mobile / coarse pointers / reduced-motion users.
  */
 const BackgroundLayer = () => {
     const imgRef = useRef(null);
     const overlayRef = useRef(null);
+    const stageRef = useRef(null);
+    const stateRef = useRef({ scrollDrift: 0, tiltX: 0, tiltY: 0 });
 
     useEffect(() => {
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        const enableMotion = !reduceMotion && !coarsePointer && !isMobile;
+
         let ticking = false;
-        const onScroll = () => {
+
+        const applyTransform = () => {
+            ticking = false;
+            const { scrollDrift, tiltX, tiltY } = stateRef.current;
+            if (imgRef.current) {
+                imgRef.current.style.transform =
+                    `translate3d(${tiltY}px, ${-scrollDrift + tiltX}px, 0) scale(1.08)`;
+            }
+            if (stageRef.current && enableMotion) {
+                stageRef.current.style.transform =
+                    `perspective(1200px) rotateX(${tiltX * 0.04}deg) rotateY(${tiltY * -0.04}deg)`;
+            }
+        };
+
+        const queue = () => {
             if (ticking) return;
             ticking = true;
-            requestAnimationFrame(() => {
-                const y = window.scrollY || 0;
-                // Drift the image upward at ~8% of scroll speed (max ~60px on a long page)
-                if (imgRef.current) {
-                    const drift = Math.min(y * 0.08, 80);
-                    imgRef.current.style.transform = `translate3d(0, ${-drift}px, 0) scale(1.06)`;
-                }
-                // Slightly intensify the dark overlay as user scrolls deeper for a "descending into depth" feel
-                if (overlayRef.current) {
-                    const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-                    const ratio = Math.min(y / max, 1);
-                    overlayRef.current.style.opacity = String(0.85 + ratio * 0.1);
-                }
-                ticking = false;
-            });
+            requestAnimationFrame(applyTransform);
         };
+
+        const onScroll = () => {
+            const y = window.scrollY || 0;
+            stateRef.current.scrollDrift = enableMotion ? Math.min(y * 0.08, 80) : 0;
+            if (overlayRef.current) {
+                const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+                const ratio = Math.min(y / max, 1);
+                overlayRef.current.style.opacity = String(0.85 + ratio * 0.1);
+            }
+            queue();
+        };
+
+        const onPointer = (e) => {
+            if (!enableMotion) return;
+            const w = window.innerWidth || 1;
+            const h = window.innerHeight || 1;
+            // -1 → 1
+            const nx = (e.clientX / w) * 2 - 1;
+            const ny = (e.clientY / h) * 2 - 1;
+            // Translate the bg image opposite to mouse for a parallax look (max ~12px)
+            stateRef.current.tiltY = nx * 12;
+            stateRef.current.tiltX = ny * 8;
+            queue();
+        };
+
         window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("mousemove", onPointer, { passive: true });
         onScroll();
-        return () => window.removeEventListener("scroll", onScroll);
+
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            window.removeEventListener("mousemove", onPointer);
+        };
     }, []);
 
     return (
@@ -48,21 +87,37 @@ const BackgroundLayer = () => {
                 overflow: "hidden",
             }}
         >
-            <img
-                ref={imgRef}
-                src="/armeen/shadow-grid.png"
-                alt=""
+            <div
+                ref={stageRef}
                 style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    objectPosition: "center top",
-                    opacity: 0.7,
-                    transform: "translate3d(0, 0, 0) scale(1.06)",
-                    transition: "transform 80ms linear",
+                    position: "absolute",
+                    inset: 0,
+                    transformStyle: "preserve-3d",
+                    transition: "transform 250ms cubic-bezier(0.22, 1, 0.36, 1)",
                     willChange: "transform",
                 }}
-            />
+            >
+                <picture>
+                    <source srcSet="/armeen/shadow-grid.webp" type="image/webp" />
+                    <img
+                        ref={imgRef}
+                        src="/armeen/shadow-grid.png"
+                        alt=""
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            objectPosition: "center top",
+                            opacity: 0.7,
+                            transform: "translate3d(0, 0, 0) scale(1.08)",
+                            transition: "transform 120ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            willChange: "transform",
+                        }}
+                    />
+                </picture>
+            </div>
             <div
                 ref={overlayRef}
                 style={{

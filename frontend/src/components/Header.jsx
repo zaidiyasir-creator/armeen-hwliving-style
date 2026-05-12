@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
+import Logo from "./Logo";
 import { Menu, X, ChevronDown } from "lucide-react";
 
 const BrandMark = () => (
-    <a href="/#top" className="flex items-center gap-3 group" data-testid="brand-mark">
-        <span className="relative w-9 h-9 flex items-center justify-center bg-[#E9B949] text-[#050505] transition-transform duration-500 group-hover:rotate-3">
-            <svg viewBox="0 0 32 32" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M4 28 L16 6 L28 28 Z" />
-                <path d="M11 28 V20 H21 V28" />
-            </svg>
-        </span>
-        <span className="leading-none">
-            <span className="block font-serif text-lg tracking-wider text-white">ARMEEN <span className="italic font-normal">HW</span></span>
-            <span className="block text-[9px] tracking-[0.4em] uppercase text-gray-500 mt-0.5">Enterprise · Est 2015</span>
-        </span>
+    <a href="/#top" className="flex items-center group" data-testid="brand-mark">
+        <Logo className="h-14 md:h-16 transition-transform duration-500 group-hover:scale-[1.02]" />
     </a>
 );
 

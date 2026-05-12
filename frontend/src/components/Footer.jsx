@@ -1,6 +1,7 @@
 import React from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
+import Logo from "./Logo";
 
 const Footer = () => {
     const { t, lang } = useLang();
@@ -10,18 +11,8 @@ const Footer = () => {
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
                     <div className="md:col-span-5">
-                        <div className="flex items-center gap-3 mb-6">
-                            <span className="w-10 h-10 flex items-center justify-center bg-[#E9B949] text-[#050505]">
-                                <svg viewBox="0 0 32 32" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                    <path d="M4 28 L16 6 L28 28 Z" />
-                                    <path d="M11 28 V20 H21 V28" />
-                                </svg>
-                            </span>
-                            <div>
-                                <p className="font-serif text-xl text-white tracking-wider">ARMEEN <span className="italic">HW</span> ENTERPRISE</p>
-                                <p className="text-[10px] uppercase tracking-[0.4em] text-gray-500 mt-1">NS0146183-A</p>
-                            </div>
-                        </div>
+                        <Logo className="h-20 md:h-24 mb-6" />
+                        <p className="text-[10px] uppercase tracking-[0.4em] text-gray-500 mb-6">NS0146183-A · Established 2015</p>
                         <p className="font-serif text-2xl text-gray-300 italic leading-snug max-w-md">
                             {t(content.footer.tagline)}
                         </p>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Logo from "../components/Logo";
 import { Lock, Mail } from "lucide-react";
 
 const formatError = (detail) => {
@@ -40,16 +41,8 @@ const AdminLogin = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#E9B949]/5 to-transparent"></div>
             </div>
             <div className="relative w-full max-w-md">
-                <div className="text-center mb-12">
-                    <div className="inline-flex items-center gap-3">
-                        <span className="w-10 h-10 flex items-center justify-center bg-[#E9B949] text-[#050505]">
-                            <svg viewBox="0 0 32 32" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                <path d="M4 28 L16 6 L28 28 Z" />
-                                <path d="M11 28 V20 H21 V28" />
-                            </svg>
-                        </span>
-                        <span className="font-serif text-xl text-white tracking-wider">ARMEEN <span className="italic">HW</span></span>
-                    </div>
+                <div className="text-center mb-12 flex flex-col items-center">
+                    <Logo className="h-20 mx-auto" />
                     <p className="eyebrow mt-6">Admin Console</p>
                     <h1 className="mt-3 font-serif text-3xl text-white">Sign in to continue</h1>
                 </div>
