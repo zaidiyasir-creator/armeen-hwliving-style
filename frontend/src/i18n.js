@@ -126,6 +126,13 @@ export const content = {
                     { src: "/armeen/videos/showreel-1.mp4", poster: "/armeen/videos/poster-1.jpg", label: { en: "Production Showreel · Vol 1", bm: "Showreel Produksi · Jilid 1" } },
                     { src: "/armeen/videos/showreel-2.mp4", poster: "/armeen/videos/poster-2.jpg", label: { en: "Production Showreel · Vol 2", bm: "Showreel Produksi · Jilid 2" } },
                 ],
+                gallery: [
+                    { src: "/armeen/production/bts-1.jpg", label: { en: "On-Set Cinema Rig", bm: "Rig Sinema On-Set" } },
+                    { src: "/armeen/production/bts-2.jpg", label: { en: "Sound Stage · Green Screen", bm: "Sound Stage · Skrin Hijau" } },
+                    { src: "/armeen/production/bts-3.jpg", label: { en: "Crane & Dolly Operations", bm: "Operasi Crane & Dolly" } },
+                    { src: "/armeen/production/bts-4.jpg", label: { en: "Multi-Camera Studio", bm: "Studio Berbilang-Kamera" } },
+                    { src: "/armeen/production/bts-5.jpg", label: { en: "On-Location Production", bm: "Produksi Atas-Lokasi" } },
+                ],
                 catalogs: [
                     { src: "/armeen/catalogs/camera-catalog.pdf", label: { en: "Camera Catalog", bm: "Katalog Kamera" } },
                     { src: "/armeen/catalogs/lens-catalog.pdf", label: { en: "Lens Catalog", bm: "Katalog Lensa" } },
