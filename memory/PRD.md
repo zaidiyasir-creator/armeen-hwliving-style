@@ -112,3 +112,20 @@ Test results:
 - ✅ Strategic Alliance section added (between Industries and Testimonials) — IZH Padu Resources Sdn. Bhd. as Strategic Partner, links to www.izhpadu.com
 - ✅ Scheduled publish for News — datetime-local picker in admin; backend filters `published_at > now` from public list; admin status badge: Scheduled / Published / Draft
 - ✅ Reveal animation bug fixed (MutationObserver re-attaches to async-rendered cards) — Portfolio now visible
+
+
+## Iteration 8 (2026-02) — Hero font · BTS lightbox · Per-service PDF Catalogs CMS
+**Frontend:**
+- ✅ Hero title "BUILDING EXCELLENCE." / "Engineering Futures." now uses Montserrat Medium (font-medium) for stronger presence
+- ✅ Production & Equipment Rental: 5 BTS images (bts-1..bts-5) at /armeen/production/*.jpg render as clickable gallery; click any image opens a full-screen lightbox (`services-lightbox`) with caption, dismiss via X button or backdrop click
+- ✅ Admin CMS — new "PDF Catalogs" section per service division: upload (PDF only), edit EN/BM label per file, list view, delete, save persists to MongoDB; default catalogs (Production: Camera/Lens/Audio) pre-seeded into the editor and admin can replace/extend or clear them
+
+**Backend:**
+- ✅ `ServiceOverride` model extended with `catalogs: List[CatalogItem]` (`{url, label:{en,bm}, filename}`)
+- ✅ `/api/services-overrides/{key}` PUT now accepts and persists catalogs array (empty array explicitly clears defaults)
+- ✅ Existing `/api/uploads` already accepted PDFs — reused for catalog upload (auth-protected, ext whitelist)
+- ✅ All previous endpoints regressed clean
+
+**Test results:** iteration_7.json — Backend 14/14 pytest PASS · Frontend 11/11 flows PASS (lightbox open/close, admin upload→save→reload persist→public render→BM toggle→delete) · 0 issues.
+
+**Notable behavior:** Public Services component falls back to `i18n` default catalogs only when override has no `catalogs` field. If admin saves a non-empty `catalogs` array → that replaces defaults. If admin saves an empty array → catalogs section hides (used to remove defaults).
