@@ -1,0 +1,68 @@
+{
+  "summary": "Iteration 7 testing: PDF Catalogs CMS feature, BTS gallery lightbox, and Montserrat Medium hero. Backend (14/14 pytest) and Frontend (admin upload→save→persist→public-render→BM-toggle→delete) all PASS. No issues found.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "tests_executed": {
+    "backend_pytest": {
+      "file": "/app/backend/tests/test_catalogs_iter7.py",
+      "passed": 14,
+      "failed": 0,
+      "coverage": [
+        "POST /api/auth/login + /api/auth/me",
+        "POST /api/uploads accepts PDF (uploaded camera-catalog.pdf, verified public URL serves application/pdf)",
+        "POST /api/uploads rejects .exe (400)",
+        "POST /api/uploads requires auth (401)",
+        "GET /api/services-overrides excludes _id",
+        "PUT /api/services-overrides/it with catalogs[] persists round-trip (verified via GET)",
+        "PUT /api/services-overrides/it with empty catalogs[] stores empty array (clears defaults on public)",
+        "PUT /api/services-overrides/production with catalogs[] succeeds",
+        "PUT requires auth (401)",
+        "Regression: PUT title/summary/bullets still works",
+        "Regression: GET /api/news, GET /api/projects, news CRUD all working"
+      ]
+    },
+    "frontend_playwright": {
+      "hero_montserrat_medium": "PASS — span0 'BUILDING EXCELLENCE.' computed fontFamily='Montserrat, system-ui, sans-serif' fontWeight=500. Classes include font-medium uppercase.",
+      "production_bts_gallery": "PASS — 5 images render (bts-1..bts-5) inside division-production-gallery-0..4",
+      "lightbox_open_via_image_click": "PASS — services-lightbox + services-lightbox-image appear with correct src",
+      "lightbox_close_via_x_button": "PASS — services-lightbox-close removes modal",
+      "lightbox_close_via_backdrop": "PASS — clicking backdrop removes modal",
+      "admin_login": "PASS",
+      "admin_upload_pdf_to_it": "PASS — PDF uploaded via catalog-file-input, catalog-row-0 appeared",
+      "admin_edit_en_bm_labels": "PASS — labels 'IT Test Catalog EN' / 'Katalog Ujian IT BM' filled and saved",
+      "persistence_after_reload": "PASS — labels persisted after page reload",
+      "public_site_renders_uploaded_catalog": "PASS — division-it-catalog-0 displayed with EN label and /api/uploads/<uuid>.pdf href",
+      "language_toggle_bm_renders_bm_label": "PASS — BM label 'Katalog Ujian IT BM' shown when BM mode active",
+      "admin_delete_catalog": "PASS — catalog-delete-0 + Save changes removes catalog from public site (division-it-catalogs section disappears since IT has no defaults)",
+      "cleanup_reset": "PASS — Reset to default removed override"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_catalogs_iter7.py",
+    "/app/test_reports/pytest/iter7_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Services.jsx (line 56): override.catalogs = [] correctly clears defaults but means admin cannot 'partially override' — they must either fully replace defaults or reset. This is the documented behavior per the PR notes; acceptable.",
+    "ServicesManager.jsx handleCatalogUpload (line 43): client-side .pdf extension check is correct; backend whitelist also enforces .pdf. Defense-in-depth OK.",
+    "Backend /api/uploads (server.py line 246): allows .mp4/.mov/.gif uploads via the same endpoint admin uses for catalogs — frontend filters to .pdf so this is fine, but a dedicated /api/uploads/catalog endpoint with PDF-only enforcement would be cleaner for future hardening. Non-blocking.",
+    "Backend has no file-size limit on /api/uploads — a malicious authenticated admin could upload arbitrarily large files. Consider a max-size guard (e.g. 25MB). Low priority since only authenticated admin can upload.",
+    "ServicesManager.jsx (line 100): useEffect re-runs startEdit on every overrides change which re-seeds draft and silently discards unsaved edits if overrides re-fetch finishes after user starts editing. Minor UX edge case."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_catalogs_iter7.py (new)"
+  ],
+  "success_rate": {"backend": "100% (14/14)", "frontend": "100% (all 11 review-request features verified)"},
+  "test_credentials": "admin@armeenhw.com / nYVD628EDNIF8B (from /app/memory/test_credentials.md, verified working)",
+  "seed_data_creation": "Test uploaded camera-catalog.pdf to /api/uploads then cleaned up by resetting the 'it' services-override. No persistent test data remains.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Catalogs feature is wired end-to-end. Public site only shows division-it-catalogs section when override.catalogs is non-empty (IT division has no defaults). Production division has 3 default catalogs (camera/lens/audio) — these continue to render unless admin explicitly saves a non-empty override. BTS gallery for production lives at /armeen/production/bts-1..5.jpg. Lightbox uses data-testid='services-lightbox', 'services-lightbox-image', 'services-lightbox-close'. Backend test file: /app/backend/tests/test_catalogs_iter7.py."
+}

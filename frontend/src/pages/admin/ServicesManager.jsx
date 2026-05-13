@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { api } from "../../api";
 import { content } from "../../i18n";
-import { Save, X, RotateCcw } from "lucide-react";
+import { Save, X, RotateCcw, Upload, FileText, Trash2 } from "lucide-react";
 
 const Field = ({ label, children }) => (
     <div>
@@ -34,6 +34,35 @@ const ServicesManager = () => {
     const [draft, setDraft] = useState(null);
     const [msg, setMsg] = useState("");
     const [busy, setBusy] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
+
+    const handleCatalogUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (!/\.pdf$/i.test(file.name)) {
+            setMsg("Only PDF files are allowed.");
+            e.target.value = "";
+            return;
+        }
+        setUploading(true); setMsg("");
+        try {
+            const form = new FormData();
+            form.append("file", file);
+            const { data } = await api.post("/uploads", form, { headers: { "Content-Type": "multipart/form-data" } });
+            const niceLabel = file.name.replace(/\.[^.]+$/, "");
+            setDraft((d) => ({
+                ...d,
+                catalogs: [...(d.catalogs || []), { url: data.url, filename: file.name, label: { en: niceLabel, bm: niceLabel } }],
+            }));
+            setMsg(`Uploaded ${file.name}. Remember to Save changes.`);
+        } catch (err) {
+            setMsg("Upload failed");
+        } finally {
+            setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+    };
 
     const load = async () => {
         const { data } = await api.get("/services-overrides");
@@ -46,11 +75,21 @@ const ServicesManager = () => {
     const startEdit = (key) => {
         const division = content.services.divisions.find((d) => d.key === key);
         const ov = overrides[key] || {};
+        // Seed catalogs from override if present; otherwise from i18n defaults (mapped to {url, label}).
+        let catalogs;
+        if (Array.isArray(ov.catalogs)) {
+            catalogs = ov.catalogs;
+        } else if (Array.isArray(division.catalogs)) {
+            catalogs = division.catalogs.map((c) => ({ url: c.src, label: c.label, filename: c.src.split("/").pop() }));
+        } else {
+            catalogs = [];
+        }
         setDraft({
             key,
             title: ov.title || division.title,
             summary: ov.summary || division.summary,
             bullets: ov.bullets || division.bullets,
+            catalogs,
         });
         setActiveKey(key);
     };
@@ -128,6 +167,66 @@ const ServicesManager = () => {
                             <button onClick={() => setDraft({ ...draft, bullets: [...draft.bullets, { en: "", bm: "" }] })} className="text-[10px] uppercase tracking-[0.28em] text-[#E9B949] hover:underline">
                                 + Add bullet
                             </button>
+                        </div>
+                    </Field>
+
+                    <Field label="PDF Catalogs">
+                        <div className="space-y-3" data-testid="catalogs-editor">
+                            {(draft.catalogs || []).length === 0 && (
+                                <p className="text-xs text-gray-500 italic">No catalogs yet. Upload a PDF below — visitors will see a download button under this service.</p>
+                            )}
+                            {(draft.catalogs || []).map((c, i) => (
+                                <div key={i} className="border border-[#1a1a1a] bg-[#080808] p-4 space-y-3" data-testid={`catalog-row-${i}`}>
+                                    <div className="flex items-center justify-between gap-3">
+                                        <a
+                                            href={c.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 text-sm text-[#E9B949] hover:underline truncate"
+                                            data-testid={`catalog-link-${i}`}
+                                        >
+                                            <FileText size={14} className="flex-shrink-0" />
+                                            <span className="truncate">{c.filename || c.url.split("/").pop()}</span>
+                                        </a>
+                                        <button
+                                            type="button"
+                                            onClick={() => setDraft({ ...draft, catalogs: draft.catalogs.filter((_, idx) => idx !== i) })}
+                                            className="text-gray-500 hover:text-red-400 text-[10px] uppercase tracking-[0.28em] flex items-center gap-1.5 flex-shrink-0"
+                                            data-testid={`catalog-delete-${i}`}
+                                        >
+                                            <Trash2 size={12} /> Remove
+                                        </button>
+                                    </div>
+                                    <BiInput
+                                        value={c.label}
+                                        onChange={(v) => {
+                                            const arr = [...draft.catalogs];
+                                            arr[i] = { ...arr[i], label: v };
+                                            setDraft({ ...draft, catalogs: arr });
+                                        }}
+                                        placeholder="Catalog label"
+                                    />
+                                </div>
+                            ))}
+                            <div>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="application/pdf,.pdf"
+                                    onChange={handleCatalogUpload}
+                                    className="hidden"
+                                    data-testid="catalog-file-input"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={uploading}
+                                    className="btn-armeen-ghost"
+                                    data-testid="catalog-upload-button"
+                                >
+                                    <Upload size={14} /> {uploading ? "Uploading…" : "Upload PDF Catalog"}
+                                </button>
+                            </div>
                         </div>
                     </Field>
 

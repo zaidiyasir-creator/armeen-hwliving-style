@@ -177,11 +177,18 @@ class ProjectUpdate(BaseModel):
     highlights: Optional[List[HighlightItem]] = None
 
 
+class CatalogItem(BaseModel):
+    url: str
+    label: BiText
+    filename: Optional[str] = None
+
+
 class ServiceOverride(BaseModel):
     key: str
     title: Optional[BiText] = None
     summary: Optional[BiText] = None
     bullets: Optional[List[HighlightItem]] = None
+    catalogs: Optional[List[CatalogItem]] = None
 
 
 # ============================================================================

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
 import { api } from "../api";
-import { HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt, Plus, Minus, Clapperboard, Download, Play } from "lucide-react";
+import { HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt, Plus, Minus, Clapperboard, Download, Play, X } from "lucide-react";
 
 const iconMap = { HardHat, Zap, ServerCog, Video, Gift, PlugZap, Shirt };
 
@@ -10,6 +10,7 @@ const Services = () => {
     const { t, lang } = useLang();
     const [open, setOpen] = useState(0);
     const [overrides, setOverrides] = useState({});
+    const [lightbox, setLightbox] = useState(null); // { src, label }
 
     useEffect(() => {
         let mounted = true;
@@ -48,11 +49,20 @@ const Services = () => {
     const divisions = content.services.divisions.map((d) => {
         const ov = overrides[d.key];
         if (!ov) return d;
+        // Map override catalogs (url -> src) so they render identically to defaults.
+        // Admin can explicitly clear catalogs by saving an empty array.
+        let catalogs = d.catalogs;
+        if (Array.isArray(ov.catalogs)) {
+            catalogs = ov.catalogs.length > 0
+                ? ov.catalogs.map((c) => ({ src: c.url, label: c.label }))
+                : undefined;
+        }
         return {
             ...d,
             title: ov.title || d.title,
             summary: ov.summary || d.summary,
             bullets: ov.bullets || d.bullets,
+            catalogs,
         };
     });
 
@@ -240,10 +250,13 @@ const Services = () => {
                                                         <p className="eyebrow mb-5">{lang === "en" ? "Capability Spotlight" : "Sorotan Keupayaan"}</p>
                                                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                                                             {d.gallery.map((g, gi) => (
-                                                                <figure
+                                                                <button
+                                                                    type="button"
                                                                     key={gi}
-                                                                    className={`group relative overflow-hidden border border-[#1a1a1a] bg-[#080808] ${gi === 0 ? "md:col-span-2 aspect-[16/9]" : "aspect-[4/3]"}`}
+                                                                    onClick={() => setLightbox({ src: g.src, label: t(g.label) })}
+                                                                    className={`group relative overflow-hidden border border-[#1a1a1a] bg-[#080808] cursor-zoom-in ${gi === 0 ? "md:col-span-2 aspect-[16/9]" : "aspect-[4/3]"}`}
                                                                     data-testid={`division-${d.key}-gallery-${gi}`}
+                                                                    aria-label={t(g.label)}
                                                                 >
                                                                     <img
                                                                         src={g.src}
@@ -251,12 +264,12 @@ const Services = () => {
                                                                         loading="lazy"
                                                                         className="hover-img absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
                                                                     />
-                                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
-                                                                    <figcaption className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent pointer-events-none"></div>
+                                                                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 text-left pointer-events-none">
                                                                         <span className="text-[9px] uppercase tracking-[0.32em] text-[#E9B949]">{String(gi + 1).padStart(2, "0")}</span>
                                                                         <p className="mt-1.5 font-serif text-base md:text-lg text-white leading-tight">{t(g.label)}</p>
-                                                                    </figcaption>
-                                                                </figure>
+                                                                    </div>
+                                                                </button>
                                                             ))}
                                                         </div>
                                                     </div>
@@ -286,6 +299,38 @@ const Services = () => {
                     })}
                 </div>
             </div>
+
+            {/* Lightbox */}
+            {lightbox && (
+                <div
+                    className="fixed inset-0 z-[100] bg-[#050505]/95 backdrop-blur-md flex items-center justify-center p-4 md:p-12 cursor-zoom-out"
+                    onClick={() => setLightbox(null)}
+                    data-testid="services-lightbox"
+                    role="dialog"
+                    aria-modal="true"
+                >
+                    <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
+                        className="absolute top-6 right-6 w-11 h-11 border border-[#E9B949]/60 hover:bg-[#E9B949] hover:text-[#050505] text-[#E9B949] flex items-center justify-center transition-colors"
+                        aria-label="Close"
+                        data-testid="services-lightbox-close"
+                    >
+                        <X size={18} />
+                    </button>
+                    <figure className="max-w-6xl w-full" onClick={(e) => e.stopPropagation()}>
+                        <img
+                            src={lightbox.src}
+                            alt={lightbox.label}
+                            className="w-full max-h-[80vh] object-contain border border-[#1a1a1a]"
+                            data-testid="services-lightbox-image"
+                        />
+                        <figcaption className="mt-4 text-center">
+                            <span className="eyebrow text-[#E9B949]">{lightbox.label}</span>
+                        </figcaption>
+                    </figure>
+                </div>
+            )}
         </section>
     );
 };
