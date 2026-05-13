@@ -31,7 +31,7 @@ const Hero = () => {
             <div className="relative z-10 max-w-[1400px] mx-auto px-5 md:px-12 pt-40 md:pt-44 lg:pt-48 pb-20 md:pb-32 min-h-screen flex flex-col justify-end w-full">
                 <div className="max-w-4xl">
                     <p className="eyebrow mb-5 md:mb-6" data-testid="hero-eyebrow">{t(content.hero.eyebrow)}</p>
-                    <h1 className="font-montserrat text-[1.875rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.98] tracking-[-0.025em] text-white font-medium" data-testid="hero-title">
+                    <h1 className="font-montserrat text-[1.625rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1] tracking-[-0.02em] text-white font-medium" data-testid="hero-title">
                         <span className="block uppercase font-medium">{t(content.hero.title_a)}</span>
                         <span className="block italic text-[#E9B949]/95 font-medium mt-2">{t(content.hero.title_b)}</span>
                     </h1>
