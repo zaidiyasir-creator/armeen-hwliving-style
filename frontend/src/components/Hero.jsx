@@ -28,14 +28,14 @@ const Hero = () => {
                 <span>Construction · Civil · Digital</span>
             </div>
 
-            <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 pb-24 md:pb-32 w-full">
+            <div className="relative z-10 max-w-[1400px] mx-auto px-5 md:px-12 pb-20 md:pb-32 w-full">
                 <div className="max-w-4xl">
-                    <p className="eyebrow mb-6" data-testid="hero-eyebrow">{t(content.hero.eyebrow)}</p>
-                    <h1 className="font-montserrat text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-[-0.03em] text-white font-medium" data-testid="hero-title">
+                    <p className="eyebrow mb-5 md:mb-6" data-testid="hero-eyebrow">{t(content.hero.eyebrow)}</p>
+                    <h1 className="font-montserrat text-[1.875rem] sm:text-5xl md:text-7xl lg:text-8xl leading-[0.98] tracking-[-0.025em] text-white font-medium" data-testid="hero-title">
                         <span className="block uppercase font-medium">{t(content.hero.title_a)}</span>
-                        <span className="block italic text-[#E9B949]/95 font-medium">{t(content.hero.title_b)}</span>
+                        <span className="block italic text-[#E9B949]/95 font-medium mt-2">{t(content.hero.title_b)}</span>
                     </h1>
-                    <p className="mt-10 max-w-2xl text-lg md:text-xl leading-relaxed text-gray-400 font-light" data-testid="hero-sub">
+                    <p className="mt-6 md:mt-10 max-w-2xl text-sm md:text-xl leading-relaxed text-gray-400 font-light" data-testid="hero-sub">
                         {t(content.hero.sub)}
                     </p>
 
