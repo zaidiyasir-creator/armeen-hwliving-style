@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Logo from "../components/Logo";
-import { Lock, Mail } from "lucide-react";
+import { Lock, User } from "lucide-react";
 
 const formatError = (detail) => {
     if (detail == null) return "Something went wrong.";
@@ -14,7 +14,7 @@ const formatError = (detail) => {
 const AdminLogin = () => {
     const { user, login } = useAuth();
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [err, setErr] = useState("");
     const [busy, setBusy] = useState(false);
@@ -26,7 +26,7 @@ const AdminLogin = () => {
         setErr("");
         setBusy(true);
         try {
-            await login(email, password);
+            await login(username, password);
             navigate("/admin");
         } catch (e) {
             setErr(formatError(e.response?.data?.detail) || "Login failed");
@@ -49,17 +49,18 @@ const AdminLogin = () => {
 
                 <form onSubmit={submit} className="space-y-5" data-testid="admin-login-form">
                     <div>
-                        <label className="eyebrow block mb-3">Email</label>
+                        <label className="eyebrow block mb-3">Username</label>
                         <div className="relative">
-                            <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+                            <User size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
                             <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 required
+                                autoComplete="username"
                                 className="w-full bg-transparent border border-[#27272A] focus:border-[#E9B949] text-white pl-11 pr-4 py-3.5 outline-none transition-colors"
-                                placeholder="admin@armeenhw.com"
-                                data-testid="login-email"
+                                placeholder="admin"
+                                data-testid="login-username"
                             />
                         </div>
                     </div>
@@ -72,6 +73,7 @@ const AdminLogin = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                autoComplete="current-password"
                                 className="w-full bg-transparent border border-[#27272A] focus:border-[#E9B949] text-white pl-11 pr-4 py-3.5 outline-none transition-colors"
                                 placeholder="••••••••"
                                 data-testid="login-password"

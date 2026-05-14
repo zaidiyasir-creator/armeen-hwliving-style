@@ -29,10 +29,10 @@ export const AuthProvider = ({ children }) => {
         refresh();
     }, [refresh]);
 
-    const login = async (email, password) => {
-        const { data } = await api.post("/auth/login", { email, password });
+    const login = async (username, password) => {
+        const { data } = await api.post("/auth/login", { username, password });
         if (data.access_token) localStorage.setItem("armeen_token", data.access_token);
-        setUser({ email: data.email, name: data.name, role: data.role });
+        setUser({ username: data.username, name: data.name, role: data.role });
         return data;
     };
 

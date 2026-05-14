@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Logo from "../components/Logo";
-import { LogOut, Newspaper, FolderKanban, LayoutGrid, ArrowUpRight } from "lucide-react";
+import { LogOut, Newspaper, FolderKanban, LayoutGrid, ArrowUpRight, KeyRound } from "lucide-react";
 import NewsManager from "./admin/NewsManager";
 import ProjectsManager from "./admin/ProjectsManager";
 import ServicesManager from "./admin/ServicesManager";
+import ChangePasswordModal from "./admin/ChangePasswordModal";
 
 const tabs = [
     { key: "news", label: "News", icon: Newspaper },
@@ -16,6 +17,7 @@ const tabs = [
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
     const [tab, setTab] = useState("news");
+    const [pwOpen, setPwOpen] = useState(false);
     const navigate = useNavigate();
 
     const doLogout = async () => {
@@ -33,13 +35,16 @@ const AdminDashboard = () => {
                         <span className="text-[9px] uppercase tracking-[0.4em] text-gray-500 hidden md:inline-block border-l border-[#27272A] pl-3">Admin Console</span>
                     </Link>
 
-                    <div className="flex items-center gap-6">
-                        <a href="/" target="_blank" rel="noopener noreferrer" className="text-[11px] uppercase tracking-[0.28em] text-gray-400 hover:text-[#E9B949] flex items-center gap-2" data-testid="view-site-link">
+                    <div className="flex items-center gap-4 md:gap-6">
+                        <a href="/" target="_blank" rel="noopener noreferrer" className="text-[11px] uppercase tracking-[0.28em] text-gray-400 hover:text-[#E9B949] hidden sm:flex items-center gap-2" data-testid="view-site-link">
                             View Site <ArrowUpRight size={12} />
                         </a>
-                        <span className="text-[11px] uppercase tracking-[0.28em] text-gray-500 hidden md:inline">{user?.email}</span>
+                        <span className="text-[11px] uppercase tracking-[0.28em] text-gray-500 hidden md:inline" data-testid="header-username">{user?.username}</span>
+                        <button onClick={() => setPwOpen(true)} className="btn-armeen-ghost" data-testid="open-change-password">
+                            <KeyRound size={14} /> <span className="hidden sm:inline">Change Password</span>
+                        </button>
                         <button onClick={doLogout} className="btn-armeen-ghost" data-testid="logout-button">
-                            <LogOut size={14} /> Sign Out
+                            <LogOut size={14} /> <span className="hidden sm:inline">Sign Out</span>
                         </button>
                     </div>
                 </div>
@@ -70,6 +75,8 @@ const AdminDashboard = () => {
                 {tab === "projects" && <ProjectsManager />}
                 {tab === "services" && <ServicesManager />}
             </div>
+
+            <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />
         </div>
     );
 };

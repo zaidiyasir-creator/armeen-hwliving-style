@@ -27,7 +27,7 @@ from pydantic import BaseModel, Field, EmailStr
 MONGO_URL = os.environ["MONGO_URL"]
 DB_NAME = os.environ["DB_NAME"]
 JWT_SECRET = os.environ["JWT_SECRET"]
-ADMIN_EMAIL = os.environ["ADMIN_EMAIL"]
+ADMIN_USERNAME = os.environ["ADMIN_USERNAME"]
 ADMIN_PASSWORD = os.environ["ADMIN_PASSWORD"]
 JWT_ALG = "HS256"
 ACCESS_TOKEN_MIN = 60 * 24  # 24h
@@ -72,10 +72,10 @@ def verify_password(pw: str, hashed: str) -> bool:
     return bcrypt.checkpw(pw.encode(), hashed.encode())
 
 
-def create_access_token(email: str, role: str) -> str:
+def create_access_token(username: str, role: str) -> str:
     payload = {
-        "sub": email,
-        "email": email,
+        "sub": username,
+        "username": username,
         "role": role,
         "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_MIN),
         "type": "access",
@@ -98,7 +98,7 @@ async def get_current_user(request: Request) -> dict:
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    user = await db.users.find_one({"email": payload.get("email")}, {"_id": 0, "password_hash": 0})
+    user = await db.users.find_one({"username": payload.get("username")}, {"_id": 0, "password_hash": 0})
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     return user
@@ -110,12 +110,17 @@ async def get_current_user(request: Request) -> dict:
 
 
 class LoginIn(BaseModel):
-    email: EmailStr
+    username: str
     password: str
 
 
+class ChangePasswordIn(BaseModel):
+    current_password: str
+    new_password: str
+
+
 class UserOut(BaseModel):
-    email: EmailStr
+    username: str
     name: str
     role: str
 
@@ -210,13 +215,14 @@ def _set_cookie(response: Response, token: str):
 
 @api.post("/auth/login")
 async def login(body: LoginIn, response: Response):
-    user = await db.users.find_one({"email": body.email.lower()})
+    username = body.username.strip().lower()
+    user = await db.users.find_one({"username": username})
     if not user or not verify_password(body.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    token = create_access_token(user["email"], user.get("role", "admin"))
+    token = create_access_token(user["username"], user.get("role", "admin"))
     _set_cookie(response, token)
     return {
-        "email": user["email"],
+        "username": user["username"],
         "name": user.get("name", "Admin"),
         "role": user.get("role", "admin"),
         "access_token": token,  # also returned for Bearer fallback
@@ -232,6 +238,21 @@ async def logout(response: Response):
 @api.get("/auth/me", response_model=UserOut)
 async def me(user=Depends(get_current_user)):
     return UserOut(**user)
+
+
+@api.post("/auth/change-password")
+async def change_password(body: ChangePasswordIn, user=Depends(get_current_user)):
+    if len(body.new_password) < 8:
+        raise HTTPException(status_code=400, detail="New password must be at least 8 characters")
+    doc = await db.users.find_one({"username": user["username"]})
+    if not doc or not verify_password(body.current_password, doc["password_hash"]):
+        raise HTTPException(status_code=401, detail="Current password is incorrect")
+    await db.users.update_one(
+        {"username": user["username"]},
+        {"$set": {"password_hash": hash_password(body.new_password),
+                  "password_updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return {"ok": True}
 
 
 # ============================================================================
@@ -610,30 +631,37 @@ DEFAULT_PROJECTS = [
 
 @app.on_event("startup")
 async def on_startup():
+    # Drop legacy email-based unique index if it still exists (migration from email→username)
+    try:
+        existing_indexes = await db.users.index_information()
+        if "email_1" in existing_indexes:
+            await db.users.drop_index("email_1")
+            logger.info("Dropped legacy users.email_1 index")
+    except Exception as e:
+        logger.warning("Index check failed: %s", e)
+
+    # Remove legacy admin documents that don't have a username field (cleanup before unique index)
+    await db.users.delete_many({"username": {"$exists": False}})
+
     # Indexes
-    await db.users.create_index("email", unique=True)
+    await db.users.create_index("username", unique=True)
     await db.news.create_index("id", unique=True)
     await db.projects.create_index("slug", unique=True)
     await db.services_overrides.create_index("key", unique=True)
 
     # Seed admin
-    admin_email = ADMIN_EMAIL.lower()
-    existing = await db.users.find_one({"email": admin_email})
+    admin_username = ADMIN_USERNAME.strip().lower()
+    existing = await db.users.find_one({"username": admin_username})
     if not existing:
         await db.users.insert_one({
-            "email": admin_email,
+            "username": admin_username,
             "password_hash": hash_password(ADMIN_PASSWORD),
             "name": "Armeen Admin",
             "role": "admin",
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
-        logger.info("Seeded admin user: %s", admin_email)
-    elif not verify_password(ADMIN_PASSWORD, existing["password_hash"]):
-        await db.users.update_one(
-            {"email": admin_email},
-            {"$set": {"password_hash": hash_password(ADMIN_PASSWORD)}},
-        )
-        logger.info("Updated admin password for: %s", admin_email)
+        logger.info("Seeded admin user: %s", admin_username)
+    # Note: do NOT auto-reset password on every restart — admin may have changed it via /api/auth/change-password.
 
     # Seed default projects (only if collection empty)
     if await db.projects.count_documents({}) == 0:
