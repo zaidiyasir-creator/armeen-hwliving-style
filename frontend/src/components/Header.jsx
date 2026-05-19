@@ -27,6 +27,7 @@ const Header = () => {
     const aboutItems = [
         { href: "/#about", label: { en: "The Practice", bm: "Falsafah Kami" } },
         { href: "/#leadership", label: { en: "Leadership", bm: "Kepimpinan" } },
+        { href: "/#alliance", label: { en: "Strategic Alliance", bm: "Pakatan Strategik" } },
         { href: "/#news", label: { en: "Latest News", bm: "Berita Terkini" } },
     ];
 

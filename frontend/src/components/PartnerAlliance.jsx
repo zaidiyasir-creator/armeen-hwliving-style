@@ -9,7 +9,7 @@ const PARTNERS = [
         display: "www.izhpadu.com",
         // Text monogram fallback (kept for IZH Padu — no logo asset on file)
         monogram: "IZ",
-        domain: { en: "Construction · Resources", bm: "Pembinaan · Sumber" },
+        domain: { en: "ICT Solutions Provider", bm: "Penyedia Penyelesaian ICT" },
     },
     {
         name: "HM Geomatics Sdn. Bhd.",
@@ -26,8 +26,8 @@ const PartnerAlliance = () => {
         eyebrow: { en: "Strategic Alliances", bm: "Pakatan Strategik" },
         title: { en: "United in craft.\nAligned in ambition.", bm: "Bersatu dalam keahlian.\nSelaras dalam aspirasi." },
         intro: {
-            en: "Armeen HW Enterprise operates in strategic alliance with industry specialists — combining complementary capabilities across construction, land survey and resources to deliver the most demanding national-scale commissions.",
-            bm: "Armeen HW Enterprise beroperasi dalam pakatan strategik bersama pakar industri — menggabungkan keupayaan saling melengkapi merentas pembinaan, ukur tanah dan sumber bagi projek berskala nasional yang paling mencabar.",
+            en: "Armeen HW Enterprise operates in strategic alliance with industry specialists — combining complementary capabilities across ICT solutions, land survey and engineering to deliver the most demanding national-scale commissions.",
+            bm: "Armeen HW Enterprise beroperasi dalam pakatan strategik bersama pakar industri — menggabungkan keupayaan saling melengkapi merentas penyelesaian ICT, ukur tanah dan kejuruteraan bagi projek berskala nasional yang paling mencabar.",
         },
         partnerRole: { en: "Strategic Partner", bm: "Rakan Strategik" },
         visit: { en: "Visit Partner Site", bm: "Lawat Laman Rakan" },
