@@ -13,7 +13,7 @@ const PARTNERS = [
     },
     {
         name: "HM Geomatics Sdn. Bhd.",
-        href: "https://hmgeomatics.com",
+        href: "http://www.ljt.org.my/search-surveyors-prt/practices/HM%20GEOMATICS%20SDN%20BHD",
         display: { en: "Licensed Land Surveyors · Seremban", bm: "Juruukur Tanah Berlesen · Seremban" },
         logo: "/armeen/partners/hmgeomatics.jpeg",
         domain: { en: "Licensed Land Survey", bm: "Ukur Tanah Berlesen" },
