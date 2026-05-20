@@ -15,7 +15,8 @@ const PARTNERS = [
         name: "HM Geomatics Sdn. Bhd.",
         href: "http://www.ljt.org.my/search-surveyors-prt/practices/HM%20GEOMATICS%20SDN%20BHD",
         display: { en: "Licensed Land Surveyors · Seremban", bm: "Juruukur Tanah Berlesen · Seremban" },
-        logo: "/armeen/partners/hmgeomatics.jpeg",
+        logo: "/armeen/partners/hmgeomatics.png",
+        logoTransparent: true,
         domain: { en: "Licensed Land Survey", bm: "Ukur Tanah Berlesen" },
     },
 ];
@@ -64,7 +65,7 @@ const PartnerAlliance = () => {
                                     {/* Logo / Monogram */}
                                     <div className="md:col-span-3 flex md:justify-center">
                                         {p.logo ? (
-                                            <div className="relative w-24 h-24 md:w-28 md:h-28 bg-white p-3 border border-[#E9B949]/20 group-hover:border-[#E9B949]/60 transition-colors duration-500 flex items-center justify-center">
+                                            <div className={`relative w-24 h-24 md:w-28 md:h-28 border border-[#E9B949]/20 group-hover:border-[#E9B949]/60 transition-colors duration-500 flex items-center justify-center ${p.logoTransparent ? "bg-[#0a0a0a] p-2" : "bg-white p-3"}`}>
                                                 <img
                                                     src={p.logo}
                                                     alt={`${p.name} logo`}
