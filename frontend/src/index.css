@@ -55,10 +55,17 @@ body {
     font-family: "Manrope", sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.28em;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--armeen-gold);
     font-weight: 500;
 }
+
+/* Global bump for the smallest type sizes — each step ~1–2px larger for readability */
+.text-\[9px\]   { font-size: 11px !important; }
+.text-\[10px\]  { font-size: 12px !important; }
+.text-\[11px\]  { font-size: 13px !important; }
+.text-xs        { font-size: 13px !important; line-height: 1.25rem !important; }
+.text-sm        { font-size: 15px !important; line-height: 1.5rem !important; }
 
 .gold-rule {
     width: 48px;
