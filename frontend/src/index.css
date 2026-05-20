@@ -71,6 +71,7 @@ body {
 .text-base      { font-size: 17px !important; line-height: 1.65 !important; }
 .text-lg        { font-size: 19px !important; line-height: 1.7 !important; }
 .text-xl        { font-size: 22px !important; line-height: 1.65 !important; }
+.text-\[15px\]  { font-size: 17px !important; line-height: 1.6 !important; }
 
 .gold-rule {
     width: 48px;
