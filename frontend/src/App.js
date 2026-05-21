@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { LanguageProvider } from "./components/LanguageContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -73,21 +74,23 @@ const ChromeFAB = () => {
 function App() {
     return (
         <div className="App">
-            <LanguageProvider>
-                <AuthProvider>
-                    <BrowserRouter>
-                        <ScrollToHash />
-                        <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/projects/:slug" element={<ProjectDetail />} />
-                            <Route path="/admin/login" element={<AdminLogin />} />
-                            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-                            <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-                        </Routes>
-                        <ChromeFAB />
-                    </BrowserRouter>
-                </AuthProvider>
-            </LanguageProvider>
+            <ThemeProvider>
+                <LanguageProvider>
+                    <AuthProvider>
+                        <BrowserRouter>
+                            <ScrollToHash />
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/projects/:slug" element={<ProjectDetail />} />
+                                <Route path="/admin/login" element={<AdminLogin />} />
+                                <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                                <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                            </Routes>
+                            <ChromeFAB />
+                        </BrowserRouter>
+                    </AuthProvider>
+                </LanguageProvider>
+            </ThemeProvider>
         </div>
     );
 }
