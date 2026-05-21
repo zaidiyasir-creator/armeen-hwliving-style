@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLang } from "./LanguageContext";
-import { useTheme } from "../contexts/ThemeContext";
 import { content } from "../i18n";
 import Logo from "./Logo";
-import { Menu, X, ChevronDown, Sun, Moon } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
 const BrandMark = () => (
     <a href="/#top" className="flex items-center group" data-testid="brand-mark">
@@ -13,7 +12,6 @@ const BrandMark = () => (
 
 const Header = () => {
     const { lang, setLang, t } = useLang();
-    const { theme, toggle: toggleTheme } = useTheme();
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
     const [hovered, setHovered] = useState(null); // dropdown key
@@ -128,16 +126,7 @@ const Header = () => {
                     })}
                 </nav>
 
-                <div className="flex items-center gap-4 md:gap-6">
-                    <button
-                        onClick={toggleTheme}
-                        className="hidden md:inline-flex w-9 h-9 items-center justify-center border border-[#27272A] text-gray-400 hover:text-[#E9B949] hover:border-[#E9B949]/60 transition-colors"
-                        aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-                        data-testid="theme-toggle"
-                    >
-                        {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-                    </button>
-
+                <div className="flex items-center gap-6">
                     <div className="hidden md:flex items-center gap-1 text-[11px] tracking-[0.22em]" data-testid="lang-switcher">
                         <button data-testid="lang-en" onClick={() => setLang("en")} className={`px-2 py-1 transition-colors ${lang === "en" ? "text-[#E9B949]" : "text-gray-500 hover:text-gray-200"}`}>EN</button>
                         <span className="text-gray-700">/</span>
@@ -208,17 +197,9 @@ const Header = () => {
                                 </div>
                             );
                         })}
-                        <div className="flex items-center gap-4 pt-4">
+                        <div className="flex gap-3 pt-4">
                             <button onClick={() => setLang("en")} className={`text-xs tracking-[0.22em] ${lang === "en" ? "text-[#E9B949]" : "text-gray-500"}`}>EN</button>
                             <button onClick={() => setLang("bm")} className={`text-xs tracking-[0.22em] ${lang === "bm" ? "text-[#E9B949]" : "text-gray-500"}`}>BM</button>
-                            <span className="text-gray-700">|</span>
-                            <button
-                                onClick={toggleTheme}
-                                className="flex items-center gap-2 text-xs tracking-[0.22em] text-gray-500 hover:text-[#E9B949]"
-                                data-testid="mobile-theme-toggle"
-                            >
-                                {theme === "dark" ? <><Sun size={12} /> LIGHT</> : <><Moon size={12} /> DARK</>}
-                            </button>
                         </div>
                     </div>
                 </div>
