@@ -60,18 +60,19 @@ body {
     font-weight: 500;
 }
 
-/* Global bump for the smallest type sizes — each step ~1–2px larger for readability */
-.text-\[9px\]   { font-size: 11px !important; }
-.text-\[10px\]  { font-size: 12px !important; }
-.text-\[11px\]  { font-size: 13px !important; }
-.text-xs        { font-size: 13px !important; line-height: 1.25rem !important; }
-.text-sm        { font-size: 15px !important; line-height: 1.5rem !important; }
+/* Fluid responsive typography — sizes scale smoothly between mobile (≤375px) and wide desktop (≥1440px).
+   Format: clamp(min, fluid-scaler, max) — guarantees readability at any viewport. */
+.text-\[9px\]   { font-size: clamp(10px, 0.75vw + 7px, 12px) !important; }
+.text-\[10px\]  { font-size: clamp(11px, 0.85vw + 8px, 13px) !important; }
+.text-\[11px\]  { font-size: clamp(12px, 0.95vw + 9px, 14px) !important; }
+.text-xs        { font-size: clamp(12px, 0.95vw + 9px, 14px) !important; line-height: 1.45 !important; }
+.text-sm        { font-size: clamp(14px, 1.1vw + 11px, 16px) !important; line-height: 1.55 !important; }
+.text-\[15px\]  { font-size: clamp(15px, 1.2vw + 12px, 18px) !important; line-height: 1.6 !important; }
 
-/* Body paragraph sizes — bumped for editorial readability */
-.text-base      { font-size: 17px !important; line-height: 1.65 !important; }
-.text-lg        { font-size: 19px !important; line-height: 1.7 !important; }
-.text-xl        { font-size: 22px !important; line-height: 1.65 !important; }
-.text-\[15px\]  { font-size: 17px !important; line-height: 1.6 !important; }
+/* Body paragraph sizes — editorial fluid scale */
+.text-base      { font-size: clamp(15px, 1.2vw + 12px, 18px) !important; line-height: 1.65 !important; }
+.text-lg        { font-size: clamp(17px, 1.4vw + 13px, 21px) !important; line-height: 1.65 !important; }
+.text-xl        { font-size: clamp(19px, 1.7vw + 14px, 24px) !important; line-height: 1.6 !important; }
 
 .gold-rule {
     width: 48px;
