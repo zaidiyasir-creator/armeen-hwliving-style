@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
+import { api } from "../api";
 import { Download } from "lucide-react";
 
 const About = () => {
     const { t, lang } = useLang();
+    const [profileUrl, setProfileUrl] = useState("/armeen/company-profile.pdf");
+
+    useEffect(() => {
+        api.get("/site-settings")
+            .then(({ data }) => {
+                if (data?.company_profile_url) setProfileUrl(data.company_profile_url);
+            })
+            .catch(() => {});
+    }, []);
+
     return (
         <section id="about" className="relative py-28 md:py-40" data-testid="about-section">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
@@ -19,7 +30,7 @@ const About = () => {
 
                         {/* Download Company Profile */}
                         <a
-                            href="/armeen/company-profile.pdf"
+                            href={profileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             download

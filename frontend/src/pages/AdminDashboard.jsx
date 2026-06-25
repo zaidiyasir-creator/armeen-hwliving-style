@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Logo from "../components/Logo";
-import { LogOut, Newspaper, FolderKanban, LayoutGrid, ArrowUpRight, KeyRound } from "lucide-react";
+import { LogOut, Newspaper, FolderKanban, LayoutGrid, ArrowUpRight, KeyRound, Info } from "lucide-react";
 import NewsManager from "./admin/NewsManager";
 import ProjectsManager from "./admin/ProjectsManager";
 import ServicesManager from "./admin/ServicesManager";
+import AboutManager from "./admin/AboutManager";
 import ChangePasswordModal from "./admin/ChangePasswordModal";
 
 const tabs = [
     { key: "news", label: "News", icon: Newspaper },
     { key: "projects", label: "Projects", icon: FolderKanban },
     { key: "services", label: "Services", icon: LayoutGrid },
+    { key: "about", label: "About", icon: Info },
 ];
 
 const AdminDashboard = () => {
@@ -74,6 +76,7 @@ const AdminDashboard = () => {
                 {tab === "news" && <NewsManager />}
                 {tab === "projects" && <ProjectsManager />}
                 {tab === "services" && <ServicesManager />}
+                {tab === "about" && <AboutManager />}
             </div>
 
             <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />

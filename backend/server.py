@@ -418,6 +418,31 @@ async def delete_service_override(key: str, user=Depends(get_current_user)):
 
 
 # ============================================================================
+# SITE SETTINGS (About → Company Profile PDF, etc.)
+# ============================================================================
+
+
+class SiteSettingsIn(BaseModel):
+    company_profile_url: Optional[str] = None
+    company_profile_filename: Optional[str] = None
+
+
+@api.get("/site-settings")
+async def get_site_settings():
+    doc = await db.site_settings.find_one({"key": "main"}, {"_id": 0, "key": 0}) or {}
+    return doc
+
+
+@api.put("/site-settings")
+async def update_site_settings(body: SiteSettingsIn, user=Depends(get_current_user)):
+    update = {k: v for k, v in body.model_dump().items() if v is not None}
+    update["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.site_settings.update_one({"key": "main"}, {"$set": update}, upsert=True)
+    doc = await db.site_settings.find_one({"key": "main"}, {"_id": 0, "key": 0})
+    return doc
+
+
+# ============================================================================
 # HEALTH
 # ============================================================================
 
