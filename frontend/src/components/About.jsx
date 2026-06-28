@@ -7,11 +7,13 @@ import { Download } from "lucide-react";
 const About = () => {
     const { t, lang } = useLang();
     const [profileUrl, setProfileUrl] = useState("/armeen/company-profile.pdf");
+    const [gallery, setGallery] = useState([]);
 
     useEffect(() => {
         api.get("/site-settings")
             .then(({ data }) => {
                 if (data?.company_profile_url) setProfileUrl(data.company_profile_url);
+                if (Array.isArray(data?.about_gallery)) setGallery(data.about_gallery);
             })
             .catch(() => {});
     }, []);
@@ -64,6 +66,36 @@ const About = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* About Photo Gallery (CMS-managed) */}
+                {gallery.length > 0 && (
+                    <div className="mt-20 md:mt-28 reveal" data-testid="about-photo-gallery">
+                        <p className="eyebrow mb-6">{lang === "en" ? "Moments" : "Detik-detik"}</p>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                            {gallery.map((g, i) => (
+                                <figure
+                                    key={i}
+                                    className={`group relative overflow-hidden border border-[#1a1a1a] bg-[#080808] ${i === 0 && gallery.length >= 3 ? "md:col-span-2 aspect-[16/9]" : "aspect-[4/3]"}`}
+                                    data-testid={`about-photo-${i}`}
+                                >
+                                    <img
+                                        src={g.src}
+                                        alt={t(g.label || { en: "", bm: "" })}
+                                        loading="lazy"
+                                        className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-700"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent pointer-events-none" />
+                                    {t(g.label) && (
+                                        <figcaption className="absolute bottom-0 left-0 right-0 p-4 md:p-5 pointer-events-none">
+                                            <span className="text-[9px] uppercase tracking-[0.32em] text-[#E9B949]">{String(i + 1).padStart(2, "0")}</span>
+                                            <p className="mt-1.5 font-serif text-base md:text-lg text-white leading-tight">{t(g.label)}</p>
+                                        </figcaption>
+                                    )}
+                                </figure>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Stats row */}
                 <div className="mt-24 md:mt-32 grid grid-cols-2 md:grid-cols-4 reveal" data-testid="about-stats">
