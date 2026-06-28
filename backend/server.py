@@ -188,12 +188,18 @@ class CatalogItem(BaseModel):
     filename: Optional[str] = None
 
 
+class GalleryItem(BaseModel):
+    src: str
+    label: BiText
+
+
 class ServiceOverride(BaseModel):
     key: str
     title: Optional[BiText] = None
     summary: Optional[BiText] = None
     bullets: Optional[List[HighlightItem]] = None
     catalogs: Optional[List[CatalogItem]] = None
+    gallery: Optional[List[GalleryItem]] = None
 
 
 # ============================================================================

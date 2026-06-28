@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { api } from "../../api";
 import { content } from "../../i18n";
-import { Save, X, RotateCcw, Upload, FileText, Trash2 } from "lucide-react";
+import { Save, X, RotateCcw, Upload, FileText, Trash2, Image as ImageIcon } from "lucide-react";
 
 const Field = ({ label, children }) => (
     <div>
@@ -35,7 +35,9 @@ const ServicesManager = () => {
     const [msg, setMsg] = useState("");
     const [busy, setBusy] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [uploadingImg, setUploadingImg] = useState(false);
     const fileInputRef = useRef(null);
+    const imageInputRef = useRef(null);
 
     const handleCatalogUpload = async (e) => {
         const file = e.target.files?.[0];
@@ -64,6 +66,35 @@ const ServicesManager = () => {
         }
     };
 
+    const handleImageUpload = async (e) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length === 0) return;
+        const valid = files.filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f.name));
+        if (valid.length === 0) {
+            setMsg("Only image files (jpg, png, webp, gif) are allowed.");
+            e.target.value = "";
+            return;
+        }
+        setUploadingImg(true); setMsg("");
+        try {
+            const uploaded = [];
+            for (const file of valid) {
+                const form = new FormData();
+                form.append("file", file);
+                const { data } = await api.post("/uploads", form, { headers: { "Content-Type": "multipart/form-data" } });
+                const niceLabel = file.name.replace(/\.[^.]+$/, "");
+                uploaded.push({ src: data.url, label: { en: niceLabel, bm: niceLabel } });
+            }
+            setDraft((d) => ({ ...d, gallery: [...(d.gallery || []), ...uploaded] }));
+            setMsg(`Uploaded ${uploaded.length} image${uploaded.length > 1 ? "s" : ""}. Remember to Save changes.`);
+        } catch (err) {
+            setMsg("Image upload failed");
+        } finally {
+            setUploadingImg(false);
+            if (imageInputRef.current) imageInputRef.current.value = "";
+        }
+    };
+
     const load = async () => {
         const { data } = await api.get("/services-overrides");
         const map = {};
@@ -84,12 +115,22 @@ const ServicesManager = () => {
         } else {
             catalogs = [];
         }
+        // Seed gallery similarly.
+        let gallery;
+        if (Array.isArray(ov.gallery)) {
+            gallery = ov.gallery;
+        } else if (Array.isArray(division.gallery)) {
+            gallery = division.gallery;
+        } else {
+            gallery = [];
+        }
         setDraft({
             key,
             title: ov.title || division.title,
             summary: ov.summary || division.summary,
             bullets: ov.bullets || division.bullets,
             catalogs,
+            gallery,
         });
         setActiveKey(key);
     };
@@ -225,6 +266,65 @@ const ServicesManager = () => {
                                     data-testid="catalog-upload-button"
                                 >
                                     <Upload size={14} /> {uploading ? "Uploading…" : "Upload PDF Catalog"}
+                                </button>
+                            </div>
+                        </div>
+                    </Field>
+
+                    <Field label="Gallery Images">
+                        <div className="space-y-3" data-testid="gallery-editor">
+                            {(draft.gallery || []).length === 0 && (
+                                <p className="text-xs text-gray-500 italic">No gallery images yet. Upload photos below — they will appear in the public Services section under the Capability Spotlight area.</p>
+                            )}
+                            {(draft.gallery || []).length > 0 && (
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    {(draft.gallery || []).map((g, i) => (
+                                        <div key={i} className="border border-[#1a1a1a] bg-[#080808] overflow-hidden" data-testid={`gallery-row-${i}`}>
+                                            <div className="relative aspect-[4/3] bg-[#050505]">
+                                                <img src={g.src} alt={g.label?.en || ""} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDraft({ ...draft, gallery: draft.gallery.filter((_, idx) => idx !== i) })}
+                                                    className="absolute top-2 right-2 w-7 h-7 bg-[#050505]/80 hover:bg-red-600 text-white flex items-center justify-center transition-colors"
+                                                    data-testid={`gallery-delete-${i}`}
+                                                    aria-label="Remove image"
+                                                >
+                                                    <Trash2 size={12} />
+                                                </button>
+                                            </div>
+                                            <div className="p-2">
+                                                <BiInput
+                                                    value={g.label}
+                                                    onChange={(v) => {
+                                                        const arr = [...draft.gallery];
+                                                        arr[i] = { ...arr[i], label: v };
+                                                        setDraft({ ...draft, gallery: arr });
+                                                    }}
+                                                    placeholder="Image caption"
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            <div>
+                                <input
+                                    ref={imageInputRef}
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp,image/gif"
+                                    multiple
+                                    onChange={handleImageUpload}
+                                    className="hidden"
+                                    data-testid="gallery-file-input"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => imageInputRef.current?.click()}
+                                    disabled={uploadingImg}
+                                    className="btn-armeen-ghost"
+                                    data-testid="gallery-upload-button"
+                                >
+                                    <ImageIcon size={14} /> {uploadingImg ? "Uploading…" : "Upload Photos"}
                                 </button>
                             </div>
                         </div>

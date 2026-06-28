@@ -50,12 +50,16 @@ const Services = () => {
         const ov = overrides[d.key];
         if (!ov) return d;
         // Map override catalogs (url -> src) so they render identically to defaults.
-        // Admin can explicitly clear catalogs by saving an empty array.
+        // Admin can explicitly clear catalogs/gallery by saving an empty array.
         let catalogs = d.catalogs;
         if (Array.isArray(ov.catalogs)) {
             catalogs = ov.catalogs.length > 0
                 ? ov.catalogs.map((c) => ({ src: c.url, label: c.label }))
                 : undefined;
+        }
+        let gallery = d.gallery;
+        if (Array.isArray(ov.gallery)) {
+            gallery = ov.gallery.length > 0 ? ov.gallery : undefined;
         }
         return {
             ...d,
@@ -63,6 +67,7 @@ const Services = () => {
             summary: ov.summary || d.summary,
             bullets: ov.bullets || d.bullets,
             catalogs,
+            gallery,
         };
     });
 
