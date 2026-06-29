@@ -428,10 +428,20 @@ async def delete_service_override(key: str, user=Depends(get_current_user)):
 # ============================================================================
 
 
+class ContactInfo(BaseModel):
+    phone_primary: Optional[str] = None
+    phone_secondary: Optional[str] = None
+    email: Optional[str] = None
+    address: Optional[str] = None
+    hours_en: Optional[str] = None
+    hours_bm: Optional[str] = None
+
+
 class SiteSettingsIn(BaseModel):
     company_profile_url: Optional[str] = None
     company_profile_filename: Optional[str] = None
     about_gallery: Optional[List[GalleryItem]] = None
+    contact: Optional[ContactInfo] = None
 
 
 @api.get("/site-settings")

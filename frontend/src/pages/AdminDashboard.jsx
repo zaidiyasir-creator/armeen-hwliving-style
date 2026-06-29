@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Logo from "../components/Logo";
-import { LogOut, Newspaper, FolderKanban, LayoutGrid, ArrowUpRight, KeyRound, Info } from "lucide-react";
+import { LogOut, Newspaper, FolderKanban, LayoutGrid, ArrowUpRight, KeyRound, Info, Phone } from "lucide-react";
 import NewsManager from "./admin/NewsManager";
 import ProjectsManager from "./admin/ProjectsManager";
 import ServicesManager from "./admin/ServicesManager";
 import AboutManager from "./admin/AboutManager";
+import ContactManager from "./admin/ContactManager";
 import ChangePasswordModal from "./admin/ChangePasswordModal";
 
 const tabs = [
@@ -14,6 +15,7 @@ const tabs = [
     { key: "projects", label: "Projects", icon: FolderKanban },
     { key: "services", label: "Services", icon: LayoutGrid },
     { key: "about", label: "About", icon: Info },
+    { key: "contact", label: "Contact", icon: Phone },
 ];
 
 const AdminDashboard = () => {
@@ -77,6 +79,7 @@ const AdminDashboard = () => {
                 {tab === "projects" && <ProjectsManager />}
                 {tab === "services" && <ServicesManager />}
                 {tab === "about" && <AboutManager />}
+                {tab === "contact" && <ContactManager />}
             </div>
 
             <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />

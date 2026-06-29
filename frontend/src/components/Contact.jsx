@@ -1,10 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
+import { api } from "../api";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+
+const DEFAULTS = {
+    phone_primary: "019-336 7316",
+    phone_secondary: "013-336 7316",
+    email: "armeeniza@gmail.com",
+    address: "No. 21, Tingkat 1, Jalan Durian Emas,\nBetaria Business Center,\n70100 Seremban, Negeri Sembilan Darul Khusus, Malaysia",
+    hours_en: "Monday — Saturday · 09:00 — 18:00",
+    hours_bm: "Isnin — Sabtu · 09:00 — 18:00",
+};
+
+const telLink = (display) => "tel:+60" + (display || "").replace(/\D/g, "").replace(/^0/, "");
 
 const Contact = () => {
     const { t, lang } = useLang();
+    const [c, setC] = useState(DEFAULTS);
+
+    useEffect(() => {
+        api.get("/site-settings")
+            .then(({ data }) => {
+                const ci = data?.contact || {};
+                setC({
+                    phone_primary: ci.phone_primary || DEFAULTS.phone_primary,
+                    phone_secondary: ci.phone_secondary ?? DEFAULTS.phone_secondary,
+                    email: ci.email || DEFAULTS.email,
+                    address: ci.address || DEFAULTS.address,
+                    hours_en: ci.hours_en || DEFAULTS.hours_en,
+                    hours_bm: ci.hours_bm || DEFAULTS.hours_bm,
+                });
+            })
+            .catch(() => {});
+    }, []);
+
+    const hours = lang === "en" ? c.hours_en : c.hours_bm;
+
     return (
         <section id="contact" className="relative py-28 md:py-40 bg-[#080808] border-t border-[#1a1a1a]" data-testid="contact-section">
             <div className="absolute inset-0 opacity-30">
@@ -29,25 +61,27 @@ const Contact = () => {
                     <div className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors">
                         <Phone className="w-5 h-5 text-[#E9B949]" />
                         <p className="eyebrow mt-6">{t(content.contact.phone_label)}</p>
-                        <a href="tel:+60193367316" className="block mt-4 font-serif text-xl text-white hover:text-[#E9B949] transition-colors" data-testid="contact-phone-1">019-336 7316</a>
-                        <a href="tel:+60133367316" className="block mt-1 font-serif text-xl text-gray-300 hover:text-[#E9B949] transition-colors" data-testid="contact-phone-2">013-336 7316</a>
+                        <a href={telLink(c.phone_primary)} className="block mt-4 font-serif text-xl text-white hover:text-[#E9B949] transition-colors" data-testid="contact-phone-1">{c.phone_primary}</a>
+                        {c.phone_secondary && (
+                            <a href={telLink(c.phone_secondary)} className="block mt-1 font-serif text-xl text-gray-300 hover:text-[#E9B949] transition-colors" data-testid="contact-phone-2">{c.phone_secondary}</a>
+                        )}
                     </div>
                     <div className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors">
                         <Mail className="w-5 h-5 text-[#E9B949]" />
                         <p className="eyebrow mt-6">{t(content.contact.email_label)}</p>
-                        <a href="mailto:armeeniza@gmail.com" className="block mt-4 font-serif text-xl text-white hover:text-[#E9B949] transition-colors break-all" data-testid="contact-email">armeeniza@gmail.com</a>
+                        <a href={`mailto:${c.email}`} className="block mt-4 font-serif text-xl text-white hover:text-[#E9B949] transition-colors break-all" data-testid="contact-email">{c.email}</a>
                     </div>
                     <div className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors md:col-span-2 lg:col-span-1">
                         <MapPin className="w-5 h-5 text-[#E9B949]" />
                         <p className="eyebrow mt-6">{t(content.contact.office_label)}</p>
                         <p className="mt-4 text-white font-light leading-relaxed whitespace-pre-line text-sm" data-testid="contact-address">
-                            {content.contact.office}
+                            {c.address}
                         </p>
                     </div>
                     <div className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors">
                         <Clock className="w-5 h-5 text-[#E9B949]" />
                         <p className="eyebrow mt-6">{t(content.contact.hours_label)}</p>
-                        <p className="mt-4 font-serif text-xl text-white leading-tight" data-testid="contact-hours">{t(content.contact.hours)}</p>
+                        <p className="mt-4 font-serif text-xl text-white leading-tight" data-testid="contact-hours">{hours}</p>
                     </div>
                 </div>
 
