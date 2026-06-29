@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLang } from "./LanguageContext";
+import { api } from "../api";
 import { ExternalLink } from "lucide-react";
 
-const PARTNERS = [
+const DEFAULT_PARTNERS = [
     {
         name: "IZH Padu Resources Sdn. Bhd.",
         href: "https://www.izhpadu.com",
@@ -23,6 +24,24 @@ const PARTNERS = [
 
 const PartnerAlliance = () => {
     const { t } = useLang();
+    const [PARTNERS, setPartners] = useState(DEFAULT_PARTNERS);
+
+    useEffect(() => {
+        api.get("/site-settings")
+            .then(({ data }) => {
+                if (Array.isArray(data?.partners) && data.partners.length > 0) {
+                    // Normalise CMS field names (logo_transparent → logoTransparent)
+                    setPartners(
+                        data.partners.map((p) => ({
+                            ...p,
+                            logoTransparent: p.logo_transparent ?? p.logoTransparent,
+                        }))
+                    );
+                }
+            })
+            .catch(() => {});
+    }, []);
+
     const labels = {
         eyebrow: { en: "Strategic Alliances", bm: "Pakatan Strategik" },
         title: { en: "United in craft.\nAligned in ambition.", bm: "Bersatu dalam keahlian.\nSelaras dalam aspirasi." },

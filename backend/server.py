@@ -437,11 +437,22 @@ class ContactInfo(BaseModel):
     hours_bm: Optional[str] = None
 
 
+class PartnerItem(BaseModel):
+    name: str
+    href: Optional[str] = ""
+    display: Optional[BiText] = None  # subtitle/url text
+    domain: Optional[BiText] = None   # role badge
+    logo: Optional[str] = None
+    logo_transparent: Optional[bool] = False
+    monogram: Optional[str] = None
+
+
 class SiteSettingsIn(BaseModel):
     company_profile_url: Optional[str] = None
     company_profile_filename: Optional[str] = None
     about_gallery: Optional[List[GalleryItem]] = None
     contact: Optional[ContactInfo] = None
+    partners: Optional[List[PartnerItem]] = None
 
 
 @api.get("/site-settings")
