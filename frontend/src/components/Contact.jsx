@@ -61,15 +61,15 @@ const Contact = () => {
                     <div className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors">
                         <Phone className="w-5 h-5 text-[#E9B949]" />
                         <p className="eyebrow mt-6">{t(content.contact.phone_label)}</p>
-                        <a href={telLink(c.phone_primary)} className="block mt-4 font-serif text-xl text-white hover:text-[#E9B949] transition-colors" data-testid="contact-phone-1">{c.phone_primary}</a>
+                        <a href={telLink(c.phone_primary)} className="block mt-4 text-white font-light leading-relaxed text-sm hover:text-[#E9B949] transition-colors" data-testid="contact-phone-1">{c.phone_primary}</a>
                         {c.phone_secondary && (
-                            <a href={telLink(c.phone_secondary)} className="block mt-1 font-serif text-xl text-gray-300 hover:text-[#E9B949] transition-colors" data-testid="contact-phone-2">{c.phone_secondary}</a>
+                            <a href={telLink(c.phone_secondary)} className="block mt-1 text-gray-300 font-light leading-relaxed text-sm hover:text-[#E9B949] transition-colors" data-testid="contact-phone-2">{c.phone_secondary}</a>
                         )}
                     </div>
                     <div className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors">
                         <Mail className="w-5 h-5 text-[#E9B949]" />
                         <p className="eyebrow mt-6">{t(content.contact.email_label)}</p>
-                        <a href={`mailto:${c.email}`} className="block mt-4 font-serif text-xl text-white hover:text-[#E9B949] transition-colors break-all" data-testid="contact-email">{c.email}</a>
+                        <a href={`mailto:${c.email}`} className="block mt-4 text-white font-light leading-relaxed text-sm hover:text-[#E9B949] transition-colors break-all" data-testid="contact-email">{c.email}</a>
                     </div>
                     <div className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors md:col-span-2 lg:col-span-1">
                         <MapPin className="w-5 h-5 text-[#E9B949]" />
@@ -81,7 +81,7 @@ const Contact = () => {
                     <div className="bg-[#080808] p-8 group hover:bg-[#0f0f0f] transition-colors">
                         <Clock className="w-5 h-5 text-[#E9B949]" />
                         <p className="eyebrow mt-6">{t(content.contact.hours_label)}</p>
-                        <p className="mt-4 font-serif text-xl text-white leading-tight" data-testid="contact-hours">{hours}</p>
+                        <p className="mt-4 text-white font-light leading-relaxed text-sm" data-testid="contact-hours">{hours}</p>
                     </div>
                 </div>
 

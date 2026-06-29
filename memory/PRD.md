@@ -129,3 +129,9 @@ Test results:
 **Test results:** iteration_7.json — Backend 14/14 pytest PASS · Frontend 11/11 flows PASS (lightbox open/close, admin upload→save→reload persist→public render→BM toggle→delete) · 0 issues.
 
 **Notable behavior:** Public Services component falls back to `i18n` default catalogs only when override has no `catalogs` field. If admin saves a non-empty `catalogs` array → that replaces defaults. If admin saves an empty array → catalogs section hides (used to remove defaults).
+
+
+## Iteration 9 (2026-02) — Contact Block Typography Polish
+**Frontend:**
+- ✅ Contact section: reduced font size of Telephone, Correspondence (email), and Operating Hours values to match Registered Office address (`text-sm font-light leading-relaxed`). All four columns now share consistent visual hierarchy. File: `/app/frontend/src/components/Contact.jsx`.
+- ✅ Verified visually via screenshot — uniform reading rhythm across the contact grid.
