@@ -1,11 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLang } from "./LanguageContext";
 import { content } from "../i18n";
+import { api } from "../api";
 import Logo from "./Logo";
+
+const DEFAULTS = {
+    phone_primary: "019-336 7316",
+    phone_secondary: "013-336 7316",
+    email: "armeeniza@gmail.com",
+    address: "No. 21, Tingkat 1, Jalan Durian Emas,\nBetaria Business Center,\n70100 Seremban, Negeri Sembilan",
+};
+
+const telLink = (display) => "tel:+60" + (display || "").replace(/\D/g, "").replace(/^0/, "");
+const formatPhone = (display) => {
+    if (!display) return "";
+    return "+60 " + display.replace(/^0/, "");
+};
 
 const Footer = () => {
     const { t, lang } = useLang();
+    const [c, setC] = useState(DEFAULTS);
     const year = new Date().getFullYear();
+
+    useEffect(() => {
+        api.get("/site-settings")
+            .then(({ data }) => {
+                const ci = data?.contact || {};
+                setC({
+                    phone_primary: ci.phone_primary || DEFAULTS.phone_primary,
+                    phone_secondary: ci.phone_secondary ?? DEFAULTS.phone_secondary,
+                    email: ci.email || DEFAULTS.email,
+                    address: ci.address || DEFAULTS.address,
+                });
+            })
+            .catch(() => {});
+    }, []);
+
+    const phoneCombined = c.phone_secondary
+        ? `${formatPhone(c.phone_primary)} / ${c.phone_secondary}`
+        : formatPhone(c.phone_primary);
+
     return (
         <footer className="relative bg-[#050505] pt-24 pb-12 border-t border-[#E9B949]/20" data-testid="site-footer">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
@@ -34,10 +68,18 @@ const Footer = () => {
                     <div className="md:col-span-4">
                         <p className="eyebrow mb-5">{lang === "en" ? "Contact" : "Hubungi"}</p>
                         <ul className="space-y-3 text-sm font-light text-gray-400">
-                            <li><a href="tel:+60193367316" className="hover:text-[#E9B949] transition-colors">+60 19-336 7316 / 013-336 7316</a></li>
-                            <li><a href="mailto:armeeniza@gmail.com" className="hover:text-[#E9B949] transition-colors">armeeniza@gmail.com</a></li>
-                            <li className="leading-relaxed">
-                                No. 21, Tingkat 1, Jalan Durian Emas,<br/>Betaria Business Center,<br/>70100 Seremban, Negeri Sembilan
+                            <li>
+                                <a href={telLink(c.phone_primary)} className="hover:text-[#E9B949] transition-colors" data-testid="footer-phone">
+                                    {phoneCombined}
+                                </a>
+                            </li>
+                            <li>
+                                <a href={`mailto:${c.email}`} className="hover:text-[#E9B949] transition-colors break-all" data-testid="footer-email">
+                                    {c.email}
+                                </a>
+                            </li>
+                            <li className="leading-relaxed whitespace-pre-line" data-testid="footer-address">
+                                {c.address}
                             </li>
                         </ul>
                     </div>
